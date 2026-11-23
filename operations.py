@@ -68,13 +68,14 @@ def cos(z):
         print(f"Cannot perform operation 'cos' on non-numeric value {z}.")
 
 def tan(z):
+    cordicResult = _cordic(z)
     try:
         if type(z) != int and type(z) != float:
             raise TypeError
-        elif _cordic(z)[0] == 0:
+        elif cordicResult[0] == 0:
             raise ValueError
         else:
-            return _cordic(z)[1] / _cordic(z)[0]
+            return cordicResult[1] / cordicResult[0]
     except TypeError:
         print(f"Cannot perform operation 'tan' on non-numeric value {z}.")
     except ValueError:
