@@ -131,9 +131,9 @@ def factorial(x):
                 result *= i
             return result
     except ValueError:
-        print("Cannot perform operation 'factorial' on negative number.")
+        print(f"Cannot perform operation 'factorial' on negative number {x}.")
     except TypeError:
-        print("Cannot perform operation 'factorial' on non-integer.")
+        print(f"Cannot perform operation 'factorial' on non-integer {x}.")
 
 # Calculates the principal square root of a positive number s
 def sqrt(s):
