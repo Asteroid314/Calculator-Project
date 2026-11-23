@@ -17,6 +17,43 @@ ARCTANS = [0.7853981633974483, 0.4636476090008061,
            0.0000000149011612, 0.0000000074505806]
 K = 0.6072529350088813
 
+# Calculates the least integer greater than or equal to x
+def ceil(x):
+    try:
+        if type(x) != int and type(x) != float:
+            raise TypeError
+        else:
+            int_x = int(x)
+            if x > int_x:
+                return int_x + 1
+            return int_x
+    except TypeError:
+        print(f"Cannot perform operation 'ceil' on non-numeric value {x}.")
+
+# Calculates the greatest integer less than or equal to x
+def floor(x):
+    try:
+        if type(x) != int and type(x) != float:
+            raise TypeError
+        else:
+            int_x = int(x)
+            if x < int_x:
+                return int_x - 1
+            return int_x
+    except TypeError:
+        print(f"Cannot perform operation 'floor' on non-numeric value {x}.")
+
+# Calculates the magnitude of x
+def abs(x):
+    try:
+        if type(x) != int and type(x) != float:
+            raise TypeError
+        else:
+            if x < 0:
+                return -x
+            return x
+    except TypeError:
+        print(f"Cannot perform operation 'abs' on non-numeric value {x}.")
 
 # Calculates sine and cosine of x radians.
 def _cordic(z):
