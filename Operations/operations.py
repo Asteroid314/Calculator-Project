@@ -118,23 +118,17 @@ def tan(z):
     except ValueError:
         print(f"Operation 'tan' is undefined at {z} radians.")
 
-# Calculates the product of integers 1 to x
-def factorial(x): 
-    try:
-        if type(x) != int:
-            raise TypeError
-        elif x < 0:
-            raise ValueError
-        else:
-            result = 1
-            for i in range(1, x+1):
-                result *= i
-            return result
-    except ValueError:
-        print(f"Cannot perform operation 'factorial' on negative number {x}.")
-    except TypeError:
-        print(f"Cannot perform operation 'factorial' on non-integer {x}.")
-
+# Calculates the factorial of a non-negative integer
+def fact(n):
+    if type(n) != int:
+        raise TypeError("Factorial requires an integer")
+    if n < 0:
+        raise ValueError("Factorial is undefined for negative integers")
+    result = 1
+    for i in range(2, n + 1):
+        result *= i
+    return result
+           
 # Calculates the principal square root of a positive number s
 def sqrt(s):
     try:
