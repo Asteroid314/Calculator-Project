@@ -50,24 +50,35 @@ def _cordic(z):
     return round(x, 14) + 0.0, round(y, 14) + 0.0
 
 def sin(z):
-    if type(z) != int and type(z) != float:
-        raise TypeError(f"Cannot perform operation 'sin' on non-numeric value {z}.")
-    else:
-        return _cordic(z)[1]
+    try:
+        if type(z) != int and type(z) != float:
+            raise TypeError
+        else:
+            return _cordic(z)[1]
+    except TypeError:
+        print(f"Cannot perform operation 'sin' on non-numeric value {z}.")
 
 def cos(z):
-    if type(z) != int and type(z) != float:
-        raise TypeError(f"Cannot perform operation 'cos' on non-numeric value {z}.")
-    else:
-        return _cordic(z)[0]
+    try:
+        if type(z) != int and type(z) != float:
+            raise TypeError
+        else:
+            return _cordic(z)[0]
+    except TypeError:
+        print(f"Cannot perform operation 'cos' on non-numeric value {z}.")
 
 def tan(z):
-    if type(z) != int and type(z) != float:
-        raise TypeError(f"Cannot perform operation 'tan' on non-numeric value {z}.")
-    elif _cordic(z)[0] == 0:
-        raise ValueError(f"Operation 'tan' is undefined at {z} radians.")
-    else:
-        return _cordic(z)[1] / _cordic(z)[0]
+    try:
+        if type(z) != int and type(z) != float:
+            raise TypeError
+        elif _cordic(z)[0] == 0:
+            raise ValueError
+        else:
+            return _cordic(z)[1] / _cordic(z)[0]
+    except TypeError:
+        print(f"Cannot perform operation 'tan' on non-numeric value {z}.")
+    except ValueError:
+        print(f"Operation 'tan' is undefined at {z} radians.")
 
 # Calculates the product of integers 1 to x
 def factorial(x): 
@@ -85,3 +96,22 @@ def factorial(x):
         print("Cannot perform operation 'factorial' on negative number.")
     except TypeError:
         print("Cannot perform operation 'factorial' on non-integer.")
+
+# Calculates the principal square root of a positive number s
+def sqrt(s):
+    try:
+        if type(s) != int and type(s) != float:
+            raise TypeError
+        elif s < 0:
+            raise ValueError
+        else:
+            xNext = 0.1
+            x = s
+            while xNext != x:
+                x = xNext
+                xNext = (x + s / x) / 2
+            return xNext
+    except TypeError:
+        print(f"Cannot perform operation 'sqrt' on non-numeric value {s}.")
+    except ValueError:
+        print(f"Cannot perform operation 'sqrt' on negative number {s}.")
