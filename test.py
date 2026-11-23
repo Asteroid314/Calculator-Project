@@ -9,7 +9,7 @@ def factorial(n):
         else:
             return n*factorial(n-1)
     except ValueError:
-        return "Must be greater than 0 to perform a factorial"
+        return "Must be 0 or greater to perform a factorial"
     except TypeError:
         return f"Must be an integer, {n} is not an integer"
 
