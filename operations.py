@@ -62,12 +62,13 @@ def cos(z):
         return _cordic(z)[0]
 
 def tan(z):
+    cordicResult = _cordic(z)
     if type(z) != int and type(z) != float:
         raise TypeError(f"Cannot perform operation 'tan' on non-numeric value {z}.")
-    elif _cordic(z)[0] == 0:
+    elif cordicResult[0] == 0:
         raise ValueError(f"Operation 'tan' is undefined at {z} radians.")
     else:
-        return _cordic(z)[1] / _cordic(z)[0]
+        return cordicResult[1] / cordicResult[0]
 
 # Calculates the product of integers 1 to x
 def factorial(x): 
