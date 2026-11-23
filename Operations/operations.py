@@ -153,3 +153,15 @@ def sqrt(s):
         print(f"Cannot perform operation 'sqrt' on non-numeric value {s}.")
     except ValueError:
         print(f"Cannot perform operation 'sqrt' on negative number {s}.")
+
+# Calculates the number of combinations
+def nCr(n, r):
+    if type(n) != int or type(r) != int:
+        raise TypeError("Inputs must be integers")
+    if n < 0 or r < 0 or r > n:
+        raise ValueError("Invalid combination values")
+    r = min(r, n - r)
+    result = 1
+    for i in range(1, r + 1):
+        result = (result * (n - i + 1)) // i
+    return result
