@@ -50,16 +50,24 @@ def _cordic(z):
     return round(x, 14) + 0.0, round(y, 14) + 0.0
 
 def sin(z):
-    return _cordic(z)[1]
+    if type(z) != int and type(z) != float:
+        raise TypeError(f"Cannot perform operation 'sin' on non-numeric value {z}.")
+    else:
+        return _cordic(z)[1]
 
 def cos(z):
-    return _cordic(z)[0]
+    if type(z) != int and type(z) != float:
+        raise TypeError(f"Cannot perform operation 'cos' on non-numeric value {z}.")
+    else:
+        return _cordic(z)[0]
 
 def tan(z):
-    return _cordic(z)[1] / _cordic(z)[0]
-
-print(tan(PI / 4))
-
+    if type(z) != int and type(z) != float:
+        raise TypeError(f"Cannot perform operation 'tan' on non-numeric value {z}.")
+    elif _cordic(z)[0] == 0:
+        raise ValueError(f"Operation 'tan' is undefined at {z} radians.")
+    else:
+        return _cordic(z)[1] / _cordic(z)[0]
 
 # Calculates the product of integers 1 to x
 def factorial(x): 
