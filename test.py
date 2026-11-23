@@ -11,7 +11,7 @@ def factorial(n):
     except ValueError:
         return "Must be 0 or greater to perform a factorial"
     except TypeError:
-        return f"Must be an integer, {n} is not an integer"
+        return f"Must be an integer, as {n} is not an integer"
 
 print(factorial("joshua vandervelde"))
 print(factorial(7))
