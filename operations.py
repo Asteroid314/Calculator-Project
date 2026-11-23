@@ -1,0 +1,79 @@
+
+# Constants
+PI = 3.141592653589793238462643
+ARCTANS = [0.7853981633974483, 0.4636476090008061, 
+           0.2449786631268641, 0.1243549945467614, 
+           0.0624188099959574, 0.0312398334302683, 
+           0.0156237286204768, 0.0078123410601011, 
+           0.0039062301319670, 0.0019531225164788, 
+           0.0009765621895593, 0.0004882812111949, 
+           0.0002441406201494, 0.0001220703118937, 
+           0.0000610351561742, 0.0000305175781155, 
+           0.0000152587890613, 0.0000076293945311, 
+           0.0000038146972656, 0.0000019073486328, 
+           0.0000009536743164, 0.0000004768371582, 
+           0.0000002384185791, 0.0000001192092896, 
+           0.0000000596046448, 0.0000000298023224, 
+           0.0000000149011612, 0.0000000074505806]
+K = 0.6072529350088813
+
+
+# Calculates sine and cosine of x radians.
+def _cordic(z):
+    # Wrap any input angle into one full period [0, 2pi]
+    z %= 2 * PI
+
+    # Wrap angle into [-pi, +pi]
+    if z > PI:
+        z -= 2 * PI
+    elif z < -PI:
+        z += 2 * PI
+
+    # Pre-rotate into [-pi/2, +pi/2] and initialise.
+    if z > PI / 2:
+        x, y = 0, K
+        z -= PI / 2
+    elif z < -PI / 2:
+        x, y = 0, -K
+        z += PI / 2
+    else:
+        x, y = K, 0
+
+    # Main loop - converge on exact angle
+    for i in range(55):
+        step = ARCTANS[i] if i < len(ARCTANS) else (2 ** -i)
+        if z >= 0:
+            xNext, yNext, zNext = x - (y * (2 ** -i)), y + (x * (2 ** -i)), z - step
+        else:
+            xNext, yNext, zNext = x + (y * (2 ** -i)), y - (x * (2 ** -i)), z + step
+        x, y, z = xNext, yNext, zNext
+    return round(x, 14) + 0.0, round(y, 14) + 0.0
+
+def sin(z):
+    return _cordic(z)[1]
+
+def cos(z):
+    return _cordic(z)[0]
+
+def tan(z):
+    return _cordic(z)[1] / _cordic(z)[0]
+
+print(tan(PI / 4))
+
+
+# Calculates the product of integers 1 to x
+def factorial(x): 
+    try:
+        if type(x) != int:
+            raise TypeError
+        elif x < 0:
+            raise ValueError
+        else:
+            result = 1
+            for i in range(1, x+1):
+                result *= i
+            return result
+    except ValueError:
+        print("Cannot perform operation 'factorial' on negative number.")
+    except TypeError:
+        print("Cannot perform operation 'factorial' on non-integer.")
