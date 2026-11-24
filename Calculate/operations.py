@@ -117,7 +117,7 @@ class Operation:
         x = self.param1
         y = self.param2
         try:
-            if x != int and x != float:
+            if type(x) != int and type(x) != float:
                 raise VariableTypeError(x)
             elif y != int and y != float:
                 raise VariableTypeError(y)
