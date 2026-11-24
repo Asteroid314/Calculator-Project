@@ -11,7 +11,7 @@ class InvalidParenthesisError(Exception):
 class MissingTokenError(Exception):
     pass
 
-class SyntaxError(Exception):
+class InvalidExpressionError(Exception):
     pass
 
 class Token:
@@ -31,7 +31,7 @@ class Lexer:
 
     def SetExpression(self, expr):
         if len(expr) == 0: #empty input
-            raise SyntaxError("Expression cannot be empty, please enter something")
+            raise InvalidExpressionError("Expression cannot be empty, please enter something")
         else:
             return expr
 
@@ -87,7 +87,7 @@ class Lexer:
         elif result == 'sqrt':
             return Token('SQRT', 'sqrt')
         else:
-            raise SyntaxError("Result not in functions")
+            raise InvalidExpressionError("Result not in functions")
 
     def InterpretNumber(self): #is able to encode integers and floating points
         floating = False
@@ -99,7 +99,7 @@ class Lexer:
                     floating = True
                     result += self.char
                 else:
-                    raise SyntaxError("This number has incorrect syntax: two floating points") #make more specific errors
+                    raise InvalidExpressionError("This number has incorrect syntax: two floating points") #make more specific errors
             else:
                 result += self.char
 
@@ -146,7 +146,7 @@ class Lexer:
                 resultantTokens.append(self.InterpretOperation())
 
             if self.char not in ARITHMETIC_OPERATORS and self.char not in INTEGERS and self.char not in BRACKETS and self.char not in WHITELISTED and self.char not in FUNCTIONS and self.char not in ALPHABET: #this should not occur, however there will be more debug added later
-                raise SyntaxError(f"This character is not in the available syntax: {self.char}")
+                raise InvalidExpressionError(f"This character is not in the available syntax: {self.char}")
 
 
         #this part of the lexer does simple debugging based on incorrect brackets
@@ -157,6 +157,3 @@ class Lexer:
         resultantTokens.append(Token('EOL:', '-1'))
 
         return resultantTokens
-
-myLexer = Lexer('')
-print(myLexer.ParseText())
