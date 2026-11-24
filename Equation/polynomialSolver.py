@@ -8,6 +8,7 @@ class PolynomialSolver:
         self.degree = degree # Largest power of x that occurs in the polynomial
         self.coefficients = coefficients # Assume coefficients are ordered a_0, a_1, a_2, etc. (ascending powers of x)
 
+    # Selects the input degree of polynomial equation
     def selectDegree(self):
         d = self.degree
         try:
@@ -38,17 +39,19 @@ class PolynomialSolver:
         except NotImplementedError:
             print(f"Solution of polynomials of degree {d} has not yet been implemented.")
 
+    # Solves the selected degree of polynomial equation
     def solvePolynomial(self):
         return self.selectDegree()
 
+    # Checks whether the polynomial to be solved is or is not valid
     def validatePolynomial(self):
         c = self.coefficients
         d = self.degree
         try:
             for a in c:
-                if type(a) != int and type(a) != float:
+                if type(a) != int and type(a) != float: # All coefficients must be numeric
                     raise VariableTypeError(a, c.index(a))
-            if c[d] == 0:
+            if c[d] == 0: # Leading coefficient cannot equal 0 (this would effectively change the degree of the polynomial)
                 raise ZeroDivisionError
             return True
         except VariableTypeError as e:
@@ -58,6 +61,7 @@ class PolynomialSolver:
             print(f"Leading coefficient of polynomial cannot equal 0.")
             return False
 
+    # Solves polynomial equations of degree 1
     def solveLinear(self):
         a = self.coefficients
         try:
@@ -68,15 +72,16 @@ class PolynomialSolver:
         except InvalidPolynomialError:
             print("Cannot solve polynomial due to validation failing (see specific error above).")
 
+    # Solves polynomial equations of degree 2
     def solveQuadratic(self):
         a = self.coefficients
         try:
             if not self.validatePolynomial():
                 raise InvalidPolynomialError
             discriminant = (a[1] ** 2) - (4 * a[2] * a[0])
-            if discriminant < 0:
+            if discriminant < 0: # No real roots
                 raise ValueError
-            elif discriminant == 0:
+            elif discriminant == 0: # Repeated root - kept to maintain multiplicity
                 root0 = (- a[1]) / (2 * a[2])
                 return [root0, root0]
             else:
