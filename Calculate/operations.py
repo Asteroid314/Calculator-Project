@@ -84,7 +84,8 @@ class Operation:
             print(f"Cannot perform operation 'floor' on non-numeric value {x}.")
 
     # Calculates sine and cosine of x radians.
-    def _cordic(z):
+    def _cordic(self):
+        z = self.param1
         # Wrap any input angle into one full period [0, 2pi]
         z %= 2 * PI
 
@@ -122,7 +123,7 @@ class Operation:
                 print(type(z))
                 raise TypeError
             else:
-                return self._cordic(z)[1]
+                return self._cordic()[1]
         except TypeError:
             print(f"Cannot perform operation 'sin' on non-numeric value {z}.")
 
@@ -132,13 +133,13 @@ class Operation:
             if type(z) != int and type(z) != float:
                 raise TypeError
             else:
-                return self._cordic(z)[0]
+                return self._cordic()[0]
         except TypeError:
             print(f"Cannot perform operation 'cos' on non-numeric value {z}.")
 
     def tan(self):
         z = self.param1
-        cordicResult = self._cordic(z)
+        cordicResult = self._cordic()
         try:
             if type(z) != int and type(z) != float:
                 raise TypeError
@@ -202,6 +203,3 @@ class Operation:
         for i in range(1, r + 1):
             result = (result * (n - i + 1)) // i
         return result
-
-op = Operation(3.14159, 0, "sin")
-print(op.performOp())
