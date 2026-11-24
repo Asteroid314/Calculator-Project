@@ -100,12 +100,16 @@ class Operation:
                 raise VariableTypeError(x)
             elif y != int and y != float:
                 raise VariableTypeError(y)
+            elif x == 0 and y == 0:
+                raise ValueError
             elif y == 0:
                 raise ZeroDivisionError
             else:
                 return x / y
         except VariableTypeError as e:
             print(f"Cannot perform operation 'div' on non-numeric value {e.value}.")
+        except ValueError:
+            print("Operation 'div' (x/y) is indeterminate at x=0, y=0.")
         except ZeroDivisionError:
             print(f"Operation 'div' (x/y) is undefined at y={y}.")
 
@@ -124,7 +128,7 @@ class Operation:
         except VariableTypeError as e:
             print(f"Cannot perform operation 'pow' on non-numeric value {e.value}.")
         except ValueError:
-            print(f"Operation 'pow' (x^y) is undefined at x=0, y=0.")
+            print("Operation 'pow' (x^y) is undefined at x=0, y=0.")
 
     
     # Calculates the least integer greater than or equal to x
