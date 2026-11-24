@@ -19,14 +19,16 @@ K = 0.6072529350088813
 
 # When the type of multiple variables could cause the same error, use this to specify the value
 class VariableTypeError(TypeError):
-    def __init__(self, value):
+    def __init__(self, value, index = 0):
         self.value = value
+        self.index = index
         super().__init__()
 
 # When the value of multiple variables could cause the same error, use this to specify the value
 class VariableValueError(ValueError):
-    def __init__(self, value):
+    def __init__(self, value, index = 0):
         self.value = value
+        self.index = index
         super().__init__()
 
 

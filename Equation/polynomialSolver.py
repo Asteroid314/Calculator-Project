@@ -1,34 +1,95 @@
-from Calculate.operations import Operation
-def solvePolynomial(): #subprogram to select the degree of polynomial
-    degree = input("Enter the degree of the polynomial")
-    match degree:
-        case 2:
-            solveQuadratic()
-            #some code to output it nicely and deal with repeated roots
-            #some code that refrences an S/D or a format function to convert between surd, fraction and decimal
-        case 3:
-            solveCubic()
-        case 4:
-            solveQuartic()
-        case 5:
-            solveQuintic()
-        case 6:
-            solveSextic()
-def solveQuadratic(): #solver for second degree polynomial
-    a2 = input("Enter the coefficiant of the x^2 term: ") #takes the coefficiant of each term
-    a1 = input("Enter the coeficiant of the x^1 term: ") #please find a better way to do this
-    a0 = input("Enter the coefficiant of the x^0 term: ")
-    try:#checks if the expression has real roots
-        discriminant = a1 ** 2 - 4 * a2 * a0
-        if discriminant < 0:
-            raise ValueError
-        else:
-            root = Operation(discriminant, 0, "sqrt")
-            x1 = (-(a1)+root.performOp())/(2*a2)
-            x2 = (-(a1)-root.performOp())/(2*a2)
-            return[x1,x2]
-    except ValueError:
-        print("no real roots")
+from Calculate.operations import Operation, VariableValueError, VariableTypeError
+
+class InvalidPolynomialError(ValueError):
+    pass
+
+class PolynomialSolver:
+    def __init__(self, degree, coefficients):
+        self.degree = degree # Largest power of x that occurs in the polynomial
+        self.coefficients = coefficients # Assume coefficients are ordered a_0, a_1, a_2, etc. (ascending powers of x)
+
+    def selectDegree(self):
+        d = self.degree
+        try:
+            if type(d) != int:
+                raise TypeError
+            elif d <= 0:
+                raise ValueError
+            elif d > 6:
+                raise NotImplementedError
+            else:
+                match d:
+                    case 1: return self.solveLinear()
+                    case 2: return self.solveQuadratic()
+                    case 3: return self.solveCubic()
+                    case 4: return self.solveQuartic()
+                    case 5: return self.solveQuintic()
+                    case 6: return self.solveSextic()
+                    case _: print("Someone's a silly AI!")
+        except TypeError:
+            print(f"A polynomial cannot have non-integer degree {d}.")
+        except ValueError:
+            if d == 0:
+                print(f"A degree-0 polynomial equation has no solutions.")
+            elif d < 0:
+                print(f"A polynomial cannot have negative degree {d}.")
+            else:
+                print("This should not happen.")
+        except NotImplementedError:
+            print(f"Solution of polynomials of degree {d} has not yet been implemented.")
+
+    def solvePolynomial(self):
+        return self.selectDegree()
+
+    def validatePolynomial(self):
+        c = self.coefficients
+        d = self.degree
+        try:
+            for a in c:
+                if type(a) != int and type(a) != float:
+                    raise VariableTypeError(a, c.index(a))
+            if c[d] == 0:
+                raise ZeroDivisionError
+            return True
+        except VariableTypeError as e:
+            print(f"Coefficient of term in x^{e.index} in polynomial cannot have non-numeric value {e.value}.")
+            return False
+        except ZeroDivisionError:
+            print(f"Leading coefficient of polynomial cannot equal 0.")
+            return False
+
+    def solveLinear(self):
+        a = self.coefficients
+        try:
+            if not self.validatePolynomial():
+                raise InvalidPolynomialError
+            else:
+                return [(- a[0]) / a[1]]
+        except InvalidPolynomialError:
+            print("Cannot solve polynomial due to validation failing (see specific error above).")
+
+    def solveQuadratic(self):
+        a = self.coefficients
+        try:
+            if not self.validatePolynomial():
+                raise InvalidPolynomialError
+            discriminant = (a[1] ** 2) - (4 * a[2] * a[0])
+            if discriminant < 0:
+                raise ValueError
+            elif discriminant == 0:
+                root0 = (- a[1]) / (2 * a[2])
+                return [root0, root0]
+            else:
+                sqrt = Operation("sqrt", [discriminant])
+                sqrtResult = sqrt.performOp()
+                root0 = (- a[1] + sqrtResult) / (2 * a[2])
+                root1 = (- a[1] - sqrtResult) / (2 * a[2])
+                return [root0, root1]
+        except InvalidPolynomialError:
+            print("Cannot solve polynomial due to validation failing (see specific error above).")
+        except ValueError:
+            print(f"Polynomial '{a[0]} + {a[1]}x + {a[2]}x^2' has no real roots.")
+
 def solveCubic(): #Solves the cubics using the fromulae
     a3 = input("Enter the coefficiant of the x^3 term: ")
     a2 = input("Enter the coefficiant of the x^2 term: ") 
