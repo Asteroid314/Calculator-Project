@@ -1,4 +1,4 @@
-from ..Calculate.operations import sqrt
+from Calculate.operations import Operation
 def solvePolynomial(): #subprogram to select the degree of polynomial
     degree = input("Enter the degree of the polynomial")
     match degree:
@@ -19,11 +19,13 @@ def solveQuadratic(): #solver for second degree polynomial
     a1 = input("Enter the coeficiant of the x^1 term: ") #please find a better way to do this
     a0 = input("Enter the coefficiant of the x^0 term: ")
     try:#checks if the expression has real roots
-        if ((a1)**2 - 4*(a2 * a0)) < 0:
+        discriminant = a1 ** 2 - 4 * a2 * a0
+        if discriminant < 0:
             raise ValueError
         else:
-            x1 = (-(a1)+sqrt((a1 ** 2) - 4*(a0 * a2)))/(2*a2)
-            x2 = (-(a1)-sqrt((a1 ** 2) - 4*(a0 * a2)))/(2*a2)
+            root = Operation(discriminant, 0, "sqrt")
+            x1 = (-(a1)+root.performOp())/(2*a2)
+            x2 = (-(a1)-root.performOp())/(2*a2)
             return[x1,x2]
     except ValueError:
         print("no real roots")
