@@ -17,6 +17,12 @@ ARCTANS = [0.7853981633974483, 0.4636476090008061,
            0.0000000149011612, 0.0000000074505806]
 K = 0.6072529350088813
 
+class VariableTypeError(TypeError):
+    def __init__(self, value):
+        self.value = value
+        super().__init__()
+
+
 class Operation:
     def __init__(self, param1, param2, opname):
         self.param1 = float(param1)
@@ -30,6 +36,7 @@ class Operation:
                 case "sub": return self.sub()
                 case "mult": return self.mult()
                 case "div": return self.div()
+                case "pow": return self.pow()
                 case "ceil": return self.ceil()
                 case "abs": return self.abs()
                 case "floor": return self.floor()
@@ -47,16 +54,78 @@ class Operation:
         return self.selectOp()
 
     def add(self):
-        pass
+        x = self.param1
+        y = self.param2
+        try:
+            if x != int and x != float:
+                raise VariableTypeError(x)
+            elif y != int and y != float:
+                raise VariableTypeError(y)
+            else:
+                return x + y
+        except VariableTypeError as e:
+            print("Cannot perform operation 'add' on non-numeric value {e.value}.")
 
     def sub(self):
-        pass
+        x = self.param1
+        y = self.param2
+        try:
+            if x != int and x != float:
+                raise VariableTypeError(x)
+            elif y != int and y != float:
+                raise VariableTypeError(y)
+            else:
+                return x - y
+        except VariableTypeError as e:
+            print("Cannot perform operation 'sub' on non-numeric value {e.value}.")
 
     def mult(self):
-        pass
+        x = self.param1
+        y = self.param2
+        try:
+            if x != int and x != float:
+                raise VariableTypeError(x)
+            elif y != int and y != float:
+                raise VariableTypeError(y)
+            else:
+                return x * y
+        except VariableTypeError as e:
+            print("Cannot perform operation 'mult' on non-numeric value {e.value}.")
 
     def div(self):
-        pass
+        x = self.param1
+        y = self.param2
+        try:
+            if x != int and x != float:
+                raise VariableTypeError(x)
+            elif y != int and y != float:
+                raise VariableTypeError(y)
+            elif y == 0:
+                raise ZeroDivisionError
+            else:
+                return x / y
+        except VariableTypeError as e:
+            print(f"Cannot perform operation 'div' on non-numeric value {e.value}.")
+        except ZeroDivisionError:
+            print(f"Operation 'div' (x/y) is undefined at y={y}.")
+
+    def pow(self):
+        x = self.param1
+        y = self.param2
+        try:
+            if x != int and x != float:
+                raise VariableTypeError(x)
+            elif y != int and y != float:
+                raise VariableTypeError(y)
+            elif x == y == 0:
+                raise ValueError
+            else:
+                return x ** y
+        except VariableTypeError as e:
+            print(f"Cannot perform operation 'pow' on non-numeric value {e.value}.")
+        except ValueError:
+            print(f"Operation 'pow' (x^y) is undefined at x=0, y=0.")
+
     
     # Calculates the least integer greater than or equal to x
     def ceil(self):
