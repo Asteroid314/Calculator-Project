@@ -146,6 +146,6 @@ class Lexer:
             raise InvalidParenthesisError("The parenthesis do not cancel out")
 
         #add an EOL (End of line) token on the end of the lexed token output
-        resultantTokens.append(Token('EO:', '-1'))
+        resultantTokens.append(Token('EOL:', '-1'))
 
         return resultantTokens
