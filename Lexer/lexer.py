@@ -144,5 +144,8 @@ class Lexer:
         #this part of the lexer does simple debugging based on incorrect brackets
         if balancedParenthesisCount != 0:
             raise InvalidParenthesisError("The parenthesis do not cancel out")
-            
+
+        #add an EOL (End of line) token on the end of the lexed token output
+        resultantTokens.append(Token('EO:', '-1'))
+
         return resultantTokens
