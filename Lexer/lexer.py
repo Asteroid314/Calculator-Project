@@ -24,10 +24,16 @@ class Token:
 
 class Lexer:
     def __init__(self, expression):
-        self.expression = expression
+        self.expression = self.SetExpression(expression)
         self.idx = 0
         self.char = self.expression[self.idx]
         self.currentNumberIndex = 0 #represents the index of the current number to be parsed, useful for multi character lexing
+
+    def SetExpression(self, expr):
+        if len(expr) == 0: #empty input
+            raise SyntaxError("Expression cannot be empty, please enter something")
+        else:
+            return expr
 
     def IncrementCharacter(self) -> bool: #increments the character along the string of tokens
         self.idx += 1
@@ -117,6 +123,8 @@ class Lexer:
 
             while self.char in WHITELISTED:
                 self.IncrementCharacter()
+                if self.idx >= len(self.expression):
+                    break
 
             if self.char in INTEGERS:
                 resultantTokens.append(self.InterpretNumber())
@@ -149,3 +157,6 @@ class Lexer:
         resultantTokens.append(Token('EOL:', '-1'))
 
         return resultantTokens
+
+myLexer = Lexer('')
+print(myLexer.ParseText())
