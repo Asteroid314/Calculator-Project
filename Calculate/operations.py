@@ -54,10 +54,11 @@ class Operation:
                 case "tan": return self.tan()
                 case "fact": return self.fact()
                 case "sqrt": return self.sqrt()
+                case "cbrt": return self.cbrt()
                 case "choose": return self.choose()
                 case _: raise ValueError
         except ValueError:
-            print(f"Operation {self.name} is invalid.")
+            print(f"Operation '{self.name}' is invalid.")
 
     # Performs the selected operation on the input operands
     def performOp(self):
@@ -286,7 +287,7 @@ class Operation:
             elif s < 0:
                 raise ValueError
             else:
-                xNext = 0.1
+                xNext = 0.1 if s != 0.1 else 0.2
                 x = s
                 while xNext != x:
                     x = xNext
@@ -296,6 +297,21 @@ class Operation:
             print(f"Cannot perform operation 'sqrt' on non-numeric value {s}.")
         except ValueError:
             print(f"Cannot perform operation 'sqrt' on negative number {s}.")
+
+    def cbrt(self):
+        c = self.operands[0]
+        try:
+            if type(c) != int and type(c) != float:
+                raise TypeError
+            else:
+                xNext = 0.1 if c != 0.1 else 0.2
+                x = c
+                while xNext != x:
+                    x = xNext
+                    xNext = ((c / (x ** 2)) + (2 * x)) / 3
+                return xNext
+        except TypeError:
+            print(f"Cannot perform operation 'cbrt' on non-numeric value {c}.")
 
     # Calculates the number of combinations
     def choose(self):
@@ -324,4 +340,3 @@ class Operation:
             print(f"Cannot perform operation 'choose' on negative number {e.value}.")
         except ValueError:
             print(f"Operation 'choose' (nCr) is undefined at n = {n}, r = {r} (r>n).")
-        
