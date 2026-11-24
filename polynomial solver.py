@@ -19,7 +19,7 @@ def solveQuadratic(): #solver for second degree polynomial
     a1 = input("Enter the coeficiant of the x^1 term: ") #please find a better way to do this
     a0 = input("Enter the coefficiant of the x^0 term: ")
     try:#checks if the expression has real roots
-        if ((a1)**2 - 4*(a2 * a0)) > 0:
+        if ((a1)**2 - 4*(a2 * a0)) < 0:
             raise ValueError
         else:
             x1 = (-(a1)+math.sqrt((a1 ** 2) - 4*(a0 * a2)))/(2*a2)
