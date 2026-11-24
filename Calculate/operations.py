@@ -17,117 +17,166 @@ ARCTANS = [0.7853981633974483, 0.4636476090008061,
            0.0000000149011612, 0.0000000074505806]
 K = 0.6072529350088813
 
-# Calculates the least integer greater than or equal to x
-def ceil(x):
-    try:
-        if type(x) != int and type(x) != float:
-            raise TypeError
+class Operation:
+    def __init__(self, param1, param2, opname):
+        self.param1 = param1
+        self.param2 = param2
+        self.opname = opname
+
+    def selectOp(self):
+        try:
+            match self.opname:
+                case "ceil": return self.ceil()
+                case "abs": return self.abs()
+                case "floor": return self.floor()
+                case "sin": return self.sin()
+                case "cos": return self.cos()
+                case "tan": return self.tan()
+                case "fact": return self.fact()
+                case "sqrt": return self.sqrt()
+                case "choose": return choose(self.param1, self.param2)
+                case _: raise ValueError
+        except ValueError:
+            print(f"Operation {self.opname} is invalid.")
+
+    def performOp(self):
+        return self.selectOp()
+
+    # Calculates the least integer greater than or equal to x
+    def ceil(self):
+        x = self.param1
+        try:
+            if type(x) != int and type(x) != float:
+                raise TypeError
+            else:
+                int_x = int(x)
+                if x > int_x:
+                    return int_x + 1
+                return int_x
+        except TypeError:
+            print(f"Cannot perform operation 'ceil' on non-numeric value {x}.")
+
+    # Calculates the magnitude of x
+    def abs(self):
+        x = self.param1
+        try:
+            if type(x) != int and type(x) != float:
+                raise TypeError
+            else:
+                if x < 0:
+                    return -x
+                return x
+        except TypeError:
+            print(f"Cannot perform operation 'abs' on non-numeric value {x}.")
+
+    # Calculates the greatest integer less than or equal to x
+    def floor(self):
+        x = self.param1
+        try:
+            if type(x) != int and type(x) != float:
+                raise TypeError
+            else:
+                int_x = int(x)
+                if x < int_x:
+                    return int_x - 1
+                return int_x
+        except TypeError:
+            print(f"Cannot perform operation 'floor' on non-numeric value {x}.")
+
+    # Calculates sine and cosine of x radians.
+    def _cordic(z):
+        # Wrap any input angle into one full period [0, 2pi]
+        z %= 2 * PI
+
+        # Wrap angle into [-pi, +pi]
+        if z > PI:
+            z -= 2 * PI
+        elif z < -PI:
+            z += 2 * PI
+
+        # Pre-rotate into [-pi/2, +pi/2] and initialise.
+        if z > PI / 2:
+            x, y = 0, K
+            z -= PI / 2
+        elif z < -PI / 2:
+            x, y = 0, -K
+            z += PI / 2
         else:
-            int_x = int(x)
-            if x > int_x:
-                return int_x + 1
-            return int_x
-    except TypeError:
-        print(f"Cannot perform operation 'ceil' on non-numeric value {x}.")
+            x, y = K, 0
 
-# Calculates the greatest integer less than or equal to x
-def floor(x):
-    try:
-        if type(x) != int and type(x) != float:
-            raise TypeError
-        else:
-            int_x = int(x)
-            if x < int_x:
-                return int_x - 1
-            return int_x
-    except TypeError:
-        print(f"Cannot perform operation 'floor' on non-numeric value {x}.")
+        # Main loop - converge on exact angle
+        for i in range(55):
+            step = ARCTANS[i] if i < len(ARCTANS) else (2 ** -i)
+            if z >= 0:
+                xNext, yNext, zNext = x - (y * (2 ** -i)), y + (x * (2 ** -i)), z - step
+            else:
+                xNext, yNext, zNext = x + (y * (2 ** -i)), y - (x * (2 ** -i)), z + step
+            x, y, z = xNext, yNext, zNext
+        return round(x, 14) + 0.0, round(y, 14) + 0.0
 
-# Calculates the magnitude of x
-def abs(x):
-    try:
-        if type(x) != int and type(x) != float:
-            raise TypeError
-        else:
-            if x < 0:
-                return -x
-            return x
-    except TypeError:
-        print(f"Cannot perform operation 'abs' on non-numeric value {x}.")
+    def sin(self):
+        z = self.param1
+        try:
+            if type(z) != int and type(z) != float:
+                raise TypeError
+            else:
+                return _cordic(z)[1]
+        except TypeError:
+            print(f"Cannot perform operation 'sin' on non-numeric value {z}.")
 
-# Calculates sine and cosine of x radians.
-def _cordic(z):
-    # Wrap any input angle into one full period [0, 2pi]
-    z %= 2 * PI
+    def cos(self):
+        z = self.param1
+        try:
+            if type(z) != int and type(z) != float:
+                raise TypeError
+            else:
+                return _cordic(z)[0]
+        except TypeError:
+            print(f"Cannot perform operation 'cos' on non-numeric value {z}.")
 
-    # Wrap angle into [-pi, +pi]
-    if z > PI:
-        z -= 2 * PI
-    elif z < -PI:
-        z += 2 * PI
+    def tan(self):
+        z = self.param1
+        cordicResult = self._cordic(z)
+        try:
+            if type(z) != int and type(z) != float:
+                raise TypeError
+            elif cordicResult[0] == 0:
+                raise ValueError
+            else:
+                return cordicResult[1] / cordicResult[0]
+        except TypeError:
+            print(f"Cannot perform operation 'tan' on non-numeric value {z}.")
+        except ValueError:
+            print(f"Operation 'tan' is undefined at {z} radians.")
 
-    # Pre-rotate into [-pi/2, +pi/2] and initialise.
-    if z > PI / 2:
-        x, y = 0, K
-        z -= PI / 2
-    elif z < -PI / 2:
-        x, y = 0, -K
-        z += PI / 2
-    else:
-        x, y = K, 0
 
-    # Main loop - converge on exact angle
-    for i in range(55):
-        step = ARCTANS[i] if i < len(ARCTANS) else (2 ** -i)
-        if z >= 0:
-            xNext, yNext, zNext = x - (y * (2 ** -i)), y + (x * (2 ** -i)), z - step
-        else:
-            xNext, yNext, zNext = x + (y * (2 ** -i)), y - (x * (2 ** -i)), z + step
-        x, y, z = xNext, yNext, zNext
-    return round(x, 14) + 0.0, round(y, 14) + 0.0
 
-def sin(z):
-    try:
-        if type(z) != int and type(z) != float:
-            raise TypeError
-        else:
-            return _cordic(z)[1]
-    except TypeError:
-        print(f"Cannot perform operation 'sin' on non-numeric value {z}.")
 
-def cos(z):
-    try:
-        if type(z) != int and type(z) != float:
-            raise TypeError
-        else:
-            return _cordic(z)[0]
-    except TypeError:
-        print(f"Cannot perform operation 'cos' on non-numeric value {z}.")
 
-def tan(z):
-    cordicResult = _cordic(z)
-    try:
-        if type(z) != int and type(z) != float:
-            raise TypeError
-        elif cordicResult[0] == 0:
-            raise ValueError
-        else:
-            return cordicResult[1] / cordicResult[0]
-    except TypeError:
-        print(f"Cannot perform operation 'tan' on non-numeric value {z}.")
-    except ValueError:
-        print(f"Operation 'tan' is undefined at {z} radians.")
+
+
+
+
+
+
+
 
 # Calculates the factorial of a non-negative integer
 def fact(n):
-    if type(n) != int:
-        raise TypeError("Factorial requires an integer")
-    if n < 0:
-        raise ValueError("Factorial is undefined for negative integers")
-    result = 1
-    for i in range(2, n + 1):
-        result *= i
-    return result
+    try:
+        if type(n) != int:
+            raise TypeError
+        if n < 0:
+            raise ValueError
+        else:
+            result = 1
+            for i in range(2, n + 1):
+                result *= i
+            return result
+    except TypeError:
+        print(f"Cannot perform operation 'fact' on non-integer value {n}.")
+    except ValueError:
+        print(f"Operation 'fact' is undefined at {n}.")
            
 # Calculates the principal square root of a positive number s
 def sqrt(s):
@@ -149,7 +198,7 @@ def sqrt(s):
         print(f"Cannot perform operation 'sqrt' on negative number {s}.")
 
 # Calculates the number of combinations
-def nCr(n, r):
+def choose(n, r):
     if type(n) != int or type(r) != int:
         raise TypeError("Inputs must be integers")
     if n < 0 or r < 0 or r > n:
