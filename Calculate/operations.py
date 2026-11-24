@@ -116,8 +116,10 @@ class Operation:
 
     def sin(self):
         z = self.param1
+        print(z, type(z))
         try:
             if type(z) != int and type(z) != float:
+                print(type(z))
                 raise TypeError
             else:
                 return self._cordic(z)[1]
@@ -200,3 +202,6 @@ class Operation:
         for i in range(1, r + 1):
             result = (result * (n - i + 1)) // i
         return result
+
+op = Operation(3.14159, 0, "sin")
+print(op.performOp())
