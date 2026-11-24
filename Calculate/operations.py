@@ -19,8 +19,8 @@ K = 0.6072529350088813
 
 class Operation:
     def __init__(self, param1, param2, opname):
-        self.param1 = param1
-        self.param2 = param2
+        self.param1 = float(param1)
+        self.param2 = float(param2)
         self.opname = opname
 
     def selectOp(self):
@@ -34,7 +34,7 @@ class Operation:
                 case "tan": return self.tan()
                 case "fact": return self.fact()
                 case "sqrt": return self.sqrt()
-                case "choose": return choose(self.param1, self.param2)
+                case "choose": return self.choose()
                 case _: raise ValueError
         except ValueError:
             print(f"Operation {self.opname} is invalid.")
@@ -120,7 +120,7 @@ class Operation:
             if type(z) != int and type(z) != float:
                 raise TypeError
             else:
-                return _cordic(z)[1]
+                return self._cordic(z)[1]
         except TypeError:
             print(f"Cannot perform operation 'sin' on non-numeric value {z}.")
 
@@ -130,7 +130,7 @@ class Operation:
             if type(z) != int and type(z) != float:
                 raise TypeError
             else:
-                return _cordic(z)[0]
+                return self._cordic(z)[0]
         except TypeError:
             print(f"Cannot perform operation 'cos' on non-numeric value {z}.")
 
@@ -149,62 +149,54 @@ class Operation:
         except ValueError:
             print(f"Operation 'tan' is undefined at {z} radians.")
 
+    # Calculates the factorial of a non-negative integer
+    def fact(self):
+        n = self.param1
+        try:
+            if type(n) != int:
+                raise TypeError
+            if n < 0:
+                raise ValueError
+            else:
+                result = 1
+                for i in range(2, n + 1):
+                    result *= i
+                return result
+        except TypeError:
+            print(f"Cannot perform operation 'fact' on non-integer value {n}.")
+        except ValueError:
+            print(f"Operation 'fact' is undefined at {n}.")
 
+    # Calculates the principal square root of a positive number s
+    def sqrt(self):
+        s = self.param1
+        try:
+            if type(s) != int and type(s) != float:
+                raise TypeError
+            elif s < 0:
+                raise ValueError
+            else:
+                xNext = 0.1
+                x = s
+                while xNext != x:
+                    x = xNext
+                    xNext = (x + s / x) / 2
+                return xNext
+        except TypeError:
+            print(f"Cannot perform operation 'sqrt' on non-numeric value {s}.")
+        except ValueError:
+            print(f"Cannot perform operation 'sqrt' on negative number {s}.")
 
-
-
-
-
-
-
-
-
-
-
-# Calculates the factorial of a non-negative integer
-def fact(n):
-    try:
-        if type(n) != int:
-            raise TypeError
-        if n < 0:
-            raise ValueError
-        else:
-            result = 1
-            for i in range(2, n + 1):
-                result *= i
-            return result
-    except TypeError:
-        print(f"Cannot perform operation 'fact' on non-integer value {n}.")
-    except ValueError:
-        print(f"Operation 'fact' is undefined at {n}.")
-           
-# Calculates the principal square root of a positive number s
-def sqrt(s):
-    try:
-        if type(s) != int and type(s) != float:
-            raise TypeError
-        elif s < 0:
-            raise ValueError
-        else:
-            xNext = 0.1
-            x = s
-            while xNext != x:
-                x = xNext
-                xNext = (x + s / x) / 2
-            return xNext
-    except TypeError:
-        print(f"Cannot perform operation 'sqrt' on non-numeric value {s}.")
-    except ValueError:
-        print(f"Cannot perform operation 'sqrt' on negative number {s}.")
-
-# Calculates the number of combinations
-def choose(n, r):
-    if type(n) != int or type(r) != int:
-        raise TypeError("Inputs must be integers")
-    if n < 0 or r < 0 or r > n:
-        raise ValueError("Invalid combination values")
-    r = min(r, n - r)
-    result = 1
-    for i in range(1, r + 1):
-        result = (result * (n - i + 1)) // i
-    return result
+    # Calculates the number of combinations
+    def choose(self):
+        n = self.param1
+        r = self.param2
+        if type(n) != int or type(r) != int:
+            raise TypeError("Inputs must be integers")
+        if n < 0 or r < 0 or r > n:
+            raise ValueError("Invalid combination values")
+        r = min(r, n - r)
+        result = 1
+        for i in range(1, r + 1):
+            result = (result * (n - i + 1)) // i
+        return result
