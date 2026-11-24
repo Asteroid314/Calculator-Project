@@ -1,7 +1,9 @@
-ARITHMETIC_OPERATORS = ['+', '-', '*', '/', '^']
+ARITHMETIC_OPERATORS = ['+', '-', '*', '/', '^', '!']
 INTEGERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 BRACKETS = ['(', ')']
 WHITELISTED = [' ']
+FUNCTIONS = ['sin', 'cos', 'tan', 'sqrt']
+ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 
 class InvalidParenthesisError(Exception):
     pass
@@ -29,6 +31,7 @@ class Lexer:
 
     def IncrementCharacter(self) -> bool: #increments the character along the string of tokens
         self.idx += 1
+        self.currentNumberIndex += 1
         if self.idx < len(self.expression):
             self.char = self.expression[self.idx]
             return False
@@ -55,6 +58,30 @@ class Lexer:
                 return Token('LPAREN', '(')
             elif originalChar == ')':
                 return Token('RPAREN', ')')
+            elif originalChar == '!':
+                return Token('FACTORIAL', '!')
+
+    def interpretFunction(self):
+        self.currentNumberIndex = 0 #resetting current number index
+
+        functionsTable = FUNCTIONS #creates a new copy of the functions table in order to filter out
+        result = ''
+        while (self.char in ALPHABET) and (self.idx < len(self.expression)):
+            result += self.char
+            self.IncrementCharacter()
+
+        #this runs if a successful thing is found
+
+        if result == 'sin':
+            return Token('SIN', 'sin')
+        elif result == 'cos':
+            return Token('COS', 'cos')
+        elif result == 'tan':
+            return Token('TAN', 'tan')
+        elif result == 'sqrt':
+            return Token('SQRT', 'sqrt')
+        else:
+            raise SyntaxError("Result not in functions")
 
     def InterpretNumber(self): #is able to encode integers and floating points
         floating = False
@@ -97,6 +124,9 @@ class Lexer:
             if self.char in ARITHMETIC_OPERATORS:
                 resultantTokens.append(self.InterpretOperation())
 
+            if self.char in ALPHABET:
+                resultantTokens.append(self.interpretFunction())
+
             if self.char in BRACKETS:
                 if self.char == '(':
                     balancedParenthesisCount += 1
@@ -107,8 +137,8 @@ class Lexer:
                     raise InvalidParenthesisError("The parenthesis are ordered incorrectly.")
                 resultantTokens.append(self.InterpretOperation())
 
-            if self.char not in ARITHMETIC_OPERATORS and self.char not in INTEGERS and self.char not in BRACKETS and self.char not in WHITELISTED: #this should not occur, however there will be more debug added later
-                raise SyntaxError("This character is not in the available syntax: ")
+            if self.char not in ARITHMETIC_OPERATORS and self.char not in INTEGERS and self.char not in BRACKETS and self.char not in WHITELISTED and self.char not in FUNCTIONS and self.char not in ALPHABET: #this should not occur, however there will be more debug added later
+                raise SyntaxError(f"This character is not in the available syntax: {self.char}")
 
 
         #this part of the lexer does simple debugging based on incorrect brackets
@@ -116,5 +146,3 @@ class Lexer:
             raise InvalidParenthesisError("The parenthesis do not cancel out")
             
         return resultantTokens
-myLexer = Lexer('6.7 + 6')
-print(myLexer.ParseText())
