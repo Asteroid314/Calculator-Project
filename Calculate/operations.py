@@ -26,6 +26,10 @@ class Operation:
     def selectOp(self):
         try:
             match self.opname:
+                case "add": return self.add()
+                case "sub": return self.sub()
+                case "mult": return self.mult()
+                case "div": return self.div()
                 case "ceil": return self.ceil()
                 case "abs": return self.abs()
                 case "floor": return self.floor()
@@ -42,6 +46,18 @@ class Operation:
     def performOp(self):
         return self.selectOp()
 
+    def add(self):
+        pass
+
+    def sub(self):
+        pass
+
+    def mult(self):
+        pass
+
+    def div(self):
+        pass
+    
     # Calculates the least integer greater than or equal to x
     def ceil(self):
         x = self.param1
