@@ -17,21 +17,28 @@ ARCTANS = [0.7853981633974483, 0.4636476090008061,
            0.0000000149011612, 0.0000000074505806]
 K = 0.6072529350088813
 
+# When the type of multiple variables could cause the same error, use this to specify the value
 class VariableTypeError(TypeError):
+    def __init__(self, value):
+        self.value = value
+        super().__init__()
+
+# When the value of multiple variables could cause the same error, use this to specify the value
+class VariableValueError(ValueError):
     def __init__(self, value):
         self.value = value
         super().__init__()
 
 
 class Operation:
-    def __init__(self, param1, param2, opname):
-        self.param1 = float(param1)
-        self.param2 = float(param2)
-        self.opname = opname
+    def __init__(self, name, operands):
+        self.operands = operands
+        self.name = name
 
+    # Selects the input operation
     def selectOp(self):
         try:
-            match self.opname:
+            match self.name:
                 case "add": return self.add()
                 case "sub": return self.sub()
                 case "mult": return self.mult()
@@ -48,57 +55,62 @@ class Operation:
                 case "choose": return self.choose()
                 case _: raise ValueError
         except ValueError:
-            print(f"Operation {self.opname} is invalid.")
+            print(f"Operation {self.name} is invalid.")
 
+    # Performs the selected operation on the input operands
     def performOp(self):
         return self.selectOp()
 
+    # Calculates the sum of x and y
     def add(self):
-        x = self.param1
-        y = self.param2
+        x = self.operands[0]
+        y = self.operands[1]
         try:
-            if x != int and x != float:
+            if type(x) != int and type(x) != float:
                 raise VariableTypeError(x)
-            elif y != int and y != float:
+            elif type(y) != int and type(y) != float:
                 raise VariableTypeError(y)
             else:
                 return x + y
         except VariableTypeError as e:
             print("Cannot perform operation 'add' on non-numeric value {e.value}.")
 
+    # Calculates the difference of x and y
     def sub(self):
-        x = self.param1
-        y = self.param2
+        x = self.operands[0]
+        y = self.operands[1]
         try:
-            if x != int and x != float:
+            if type(x) != int and type(x) != float:
                 raise VariableTypeError(x)
-            elif y != int and y != float:
+            elif type(y) != int and type(y) != float:
                 raise VariableTypeError(y)
             else:
                 return x - y
         except VariableTypeError as e:
             print("Cannot perform operation 'sub' on non-numeric value {e.value}.")
 
+    # Calculates the product of x and y
     def mult(self):
-        x = self.param1
-        y = self.param2
+        x = self.operands[0]
+        y = self.operands[1]
         try:
-            if x != int and x != float:
+            if type(x) != int and type(x) != float:
                 raise VariableTypeError(x)
-            elif y != int and y != float:
+            elif type(y) != int and type(y) != float:
                 raise VariableTypeError(y)
             else:
                 return x * y
         except VariableTypeError as e:
             print("Cannot perform operation 'mult' on non-numeric value {e.value}.")
 
+    # Calculates the quotient of x and y
     def div(self):
-        x = self.param1
-        y = self.param2
+        x = self.operands[0]
+        y = self.operands[1]
         try:
-            if x != int and x != float:
+            if type(x) != int and type(x) != float:
                 raise VariableTypeError(x)
-            elif y != int and y != float:
+            elif type(y) != int and type(y) != float:
                 raise VariableTypeError(y)
             elif x == 0 and y == 0:
                 raise ValueError
@@ -113,13 +125,14 @@ class Operation:
         except ZeroDivisionError:
             print(f"Operation 'div' (x/y) is undefined at y={y}.")
 
+    # Calculates the result of raising x to the yth power
     def pow(self):
-        x = self.param1
-        y = self.param2
+        x = self.operands[0]
+        y = self.operands[1]
         try:
             if type(x) != int and type(x) != float:
                 raise VariableTypeError(x)
-            elif y != int and y != float:
+            elif type(y) != int and type(y) != float:
                 raise VariableTypeError(y)
             elif x == y == 0:
                 raise ValueError
@@ -133,7 +146,7 @@ class Operation:
     
     # Calculates the least integer greater than or equal to x
     def ceil(self):
-        x = self.param1
+        x = self.operands[0]
         try:
             if type(x) != int and type(x) != float:
                 raise TypeError
@@ -147,7 +160,7 @@ class Operation:
 
     # Calculates the magnitude of x
     def abs(self):
-        x = self.param1
+        x = self.operands[0]
         try:
             if type(x) != int and type(x) != float:
                 raise TypeError
@@ -160,7 +173,7 @@ class Operation:
 
     # Calculates the greatest integer less than or equal to x
     def floor(self):
-        x = self.param1
+        x = self.operands[0]
         try:
             if type(x) != int and type(x) != float:
                 raise TypeError
@@ -174,7 +187,7 @@ class Operation:
 
     # Calculates sine and cosine of x radians.
     def _cordic(self):
-        z = self.param1
+        z = self.operands[0]
         # Wrap any input angle into one full period [0, 2pi]
         z %= 2 * PI
 
@@ -204,8 +217,9 @@ class Operation:
             x, y, z = xNext, yNext, zNext
         return round(x, 14) + 0.0, round(y, 14) + 0.0
 
+    # Calculates the sine of x radians
     def sin(self):
-        z = self.param1
+        z = self.operands[0]
         print(z, type(z))
         try:
             if type(z) != int and type(z) != float:
@@ -216,8 +230,9 @@ class Operation:
         except TypeError:
             print(f"Cannot perform operation 'sin' on non-numeric value {z}.")
 
+    # Calculates the cosine of x radians
     def cos(self):
-        z = self.param1
+        z = self.operands[0]
         try:
             if type(z) != int and type(z) != float:
                 raise TypeError
@@ -226,8 +241,9 @@ class Operation:
         except TypeError:
             print(f"Cannot perform operation 'cos' on non-numeric value {z}.")
 
+    # Calculates the tangent of x radians
     def tan(self):
-        z = self.param1
+        z = self.operands[0]
         cordicResult = self._cordic()
         try:
             if type(z) != int and type(z) != float:
@@ -243,7 +259,7 @@ class Operation:
 
     # Calculates the factorial of a non-negative integer
     def fact(self):
-        n = self.param1
+        n = self.operands[0]
         try:
             if type(n) != int:
                 raise TypeError
@@ -261,7 +277,7 @@ class Operation:
 
     # Calculates the principal square root of a positive number s
     def sqrt(self):
-        s = self.param1
+        s = self.operands[0]
         try:
             if type(s) != int and type(s) != float:
                 raise TypeError
@@ -281,14 +297,29 @@ class Operation:
 
     # Calculates the number of combinations
     def choose(self):
-        n = self.param1
-        r = self.param2
-        if type(n) != int or type(r) != int:
-            raise TypeError("Inputs must be integers")
-        if n < 0 or r < 0 or r > n:
-            raise ValueError("Invalid combination values")
-        r = min(r, n - r)
-        result = 1
-        for i in range(1, r + 1):
-            result = (result * (n - i + 1)) // i
-        return result
+        n = self.operands[0]
+        r = self.operands[1]
+        try:
+            if type(n) != int:
+                raise VariableTypeError(n)
+            elif type(r) != int:
+                raise VariableTypeError(r)
+            elif n < 0:
+                raise VariableValueError(n)
+            elif r < 0:
+                raise VariableValueError(r)
+            elif r > n:
+                raise ValueError
+            else:
+                r = min(r, n - r)
+                result = 1
+                for i in range(1, r + 1):
+                    result = (result * (n - i + 1)) // i
+                return result
+        except VariableTypeError as e:
+            print(f"Cannot perform operation 'choose' on non-integer {e.value}.")
+        except VariableValueError as e:
+            print(f"Cannot perform operation 'choose' on negative number {e.value}.")
+        except ValueError:
+            print(f"Operation 'choose' (nCr) is undefined at n = {n}, r = {r} (r>n).")
+        
