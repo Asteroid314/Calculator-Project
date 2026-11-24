@@ -1,4 +1,4 @@
-import math
+from ..Calculate.operations import sqrt
 def solvePolynomial(): #subprogram to select the degree of polynomial
     degree = input("Enter the degree of the polynomial")
     match degree:
@@ -22,8 +22,8 @@ def solveQuadratic(): #solver for second degree polynomial
         if ((a1)**2 - 4*(a2 * a0)) < 0:
             raise ValueError
         else:
-            x1 = (-(a1)+math.sqrt((a1 ** 2) - 4*(a0 * a2)))/(2*a2)
-            x2 = (-(a1)-math.sqrt((a1 ** 2) - 4*(a0 * a2)))/(2*a2)
+            x1 = (-(a1)+sqrt((a1 ** 2) - 4*(a0 * a2)))/(2*a2)
+            x2 = (-(a1)-sqrt((a1 ** 2) - 4*(a0 * a2)))/(2*a2)
             return[x1,x2]
     except ValueError:
         print("no real roots")
