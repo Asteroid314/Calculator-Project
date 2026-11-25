@@ -1,8 +1,9 @@
+# no validation or erro handling yet
 def simultaneous():
     unknowns = int(input("Enter the number of unknowns: "))
     equations = []
     for i in range(unknowns):
-        print(f"\nEquation {i + 1}")
+        print(f"Equation {i + 1}")
         row = []
         for j in range(unknowns):
             row.append(float(input(f"Coefficient {j + 1}: ")))
