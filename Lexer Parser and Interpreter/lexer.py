@@ -90,7 +90,7 @@ class Lexer:
     def InterpretVariable(self):
         currChar = self.char
         self.IncrementCharacter()
-        return Variable(currChar)
+        return Variable(currChar) #there is simply no point to check, as all variables have the same type anyways
 
 
     def ParseText(self): #iterates over tokens and checks for incorrect syntaxing
