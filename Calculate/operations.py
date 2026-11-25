@@ -55,6 +55,7 @@ class Operation:
                 case "fact": return self.fact()
                 case "sqrt": return self.sqrt()
                 case "cbrt": return self.cbrt()
+                case "nroot": return self.nroot()
                 case "choose": return self.choose()
                 case _: raise ValueError
         except ValueError:
