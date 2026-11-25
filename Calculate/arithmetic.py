@@ -10,6 +10,15 @@ def add(*operands):
 
     return x + y
 
+@register("multiadd")
+def multiadd(*operands):
+    total = 0
+    for idx in range(len(operands)):
+        ensure_numeric(operands[idx], idx)
+        total += operands[idx]
+    return total
+
+
 @register("subtract")
 def subtract(*operands):
     x, y = get_binary_operands(operands)
@@ -27,6 +36,14 @@ def multiply(*operands):
     ensure_numeric(y, 1)
 
     return x * y
+
+@register("multimultiply")
+def multimultiply(*operands):
+    product = 1
+    for idx in range(len(operands)):
+        ensure_numeric(operands[idx], idx)
+        product *= operands[idx]
+    return product
 
 @register("divide")
 def divide(*operands):

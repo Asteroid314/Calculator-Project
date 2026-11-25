@@ -32,89 +32,6 @@ class Operation:
     # Performs the selected operation on the input operands
     def perform_op(self):
         return self.select_op()
-
-    # Calculates the sum of x and y
-    def add(self):
-        x = self.operands[0]
-        y = self.operands[1]
-        try:
-            if type(x) != int and type(x) != float:
-                raise VariableTypeError(x)
-            elif type(y) != int and type(y) != float:
-                raise VariableTypeError(y)
-            else:
-                return x + y
-        except VariableTypeError as e:
-            print("Cannot perform operation 'add' on non-numeric value {e.value}.")
-
-    # Calculates the difference of x and y
-    def sub(self):
-        x = self.operands[0]
-        y = self.operands[1]
-        try:
-            if type(x) != int and type(x) != float:
-                raise VariableTypeError(x)
-            elif type(y) != int and type(y) != float:
-                raise VariableTypeError(y)
-            else:
-                return x - y
-        except VariableTypeError as e:
-            print("Cannot perform operation 'sub' on non-numeric value {e.value}.")
-
-    # Calculates the product of x and y
-    def mult(self):
-        x = self.operands[0]
-        y = self.operands[1]
-        try:
-            if type(x) != int and type(x) != float:
-                raise VariableTypeError(x)
-            elif type(y) != int and type(y) != float:
-                raise VariableTypeError(y)
-            else:
-                return x * y
-        except VariableTypeError as e:
-            print("Cannot perform operation 'mult' on non-numeric value {e.value}.")
-
-    # Calculates the quotient of x and y
-    def div(self):
-        x = self.operands[0]
-        y = self.operands[1]
-        try:
-            if type(x) != int and type(x) != float:
-                raise VariableTypeError(x)
-            elif type(y) != int and type(y) != float:
-                raise VariableTypeError(y)
-            elif x == 0 and y == 0:
-                raise ValueError
-            elif y == 0:
-                raise ZeroDivisionError
-            else:
-                return x / y
-        except VariableTypeError as e:
-            print(f"Cannot perform operation 'div' on non-numeric value {e.value}.")
-        except ValueError:
-            print("Operation 'div' (x/y) is indeterminate at x=0, y=0.")
-        except ZeroDivisionError:
-            print(f"Operation 'div' (x/y) is undefined at y={y}.")
-
-    # Calculates the result of raising x to the yth power
-    def pow(self):
-        x = self.operands[0]
-        y = self.operands[1]
-        try:
-            if type(x) != int and type(x) != float:
-                raise VariableTypeError(x)
-            elif type(y) != int and type(y) != float:
-                raise VariableTypeError(y)
-            elif x == y == 0:
-                raise ValueError
-            else:
-                return x ** y
-        except VariableTypeError as e:
-            print(f"Cannot perform operation 'pow' on non-numeric value {e.value}.")
-        except ValueError:
-            print("Operation 'pow' (x^y) is undefined at x=0, y=0.")
-
     
     # Calculates the least integer greater than or equal to x
     def ceil(self):
@@ -237,27 +154,7 @@ class Operation:
             elif x < -1 or x > 1:
                 raise ValueError
             else:
-                negative = x < 0.0
-                ax = self.abs()
-                if ax <= 0.5:
-                    if ax < 1e-8:
-                        return x
-                    z = ax * ax
-                    p = z * (
-                        pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5))))
-                    )
-                    q = 1.0 + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)))
-                    result = ax + ax * (p / q)
-                else:
-                    z = 0.5 * (1.0 - ax)
-                    s = z ** 0.5
-                    p = z * (
-                        pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5))))
-                    )
-                    q = 1.0 + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)))
-                    r = p / q
-                    result = (PI / 2) - 2.0 * (s + s * r)
-                return -result if negative else result
+
         except TypeError:
             print(f"Cannot perform operation 'arcsin' on non-numeric value {x}.")
         except ValueError:
