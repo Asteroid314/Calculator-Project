@@ -2,10 +2,10 @@ from errors import *
 import lexer
 
 class Parser:
-    def __init__(self, tokensArray):
+    def __init__(self):
         self.idx = 0
-        self.tokensArray = tokensArray
-        self.token : lexer.Token = self.tokensArray[self.idx]
+        self.tokensArray = None
+        self.token = None
 
     def IncrementCharacter(self):
         self.idx += 1
@@ -28,24 +28,25 @@ class Parser:
             self.EatToken('FLT')
         else:
             raise InvalidExpressionError("The expression is invalid at index: ", self.idx)
-        return self.token
+        return curr_token
 
     def MulDiv(self):
-        leftToken = self.factor()
+        leftToken = self.Factor()
 
         while self.token.type == 'MUL' or self.token.type == 'DIV':
             currentToken = self.token
 
             if currentToken.type == 'MUL':
-                self.eatToken('MUL')
-                result = result * self.Factor()
+                self.EatToken('MUL')
+                leftToken.value = leftToken.value * self.Factor().value
 
             elif currentToken.type == 'DIV':
                 self.EatToken('DIV')
-                result = result / self.Factor()
+                leftToken.value = leftToken.value / self.Factor().value
+
+        return leftToken
 
     def AddSub(self):
-
         leftToken = self.MulDiv()
 
         while self.token.type == 'PLUS' or self.token.type == 'MINUS':
@@ -53,14 +54,15 @@ class Parser:
 
             if currentToken.type == 'PLUS':
                 self.EatToken('PLUS')
-                result = result + self.MulDiv()
+                leftToken.value = leftToken.value + self.MulDiv().value
 
             elif currentToken.type == 'MINUS':
                 self.EatToken('MINUS')
-                result = result - self.MulDiv()
+                leftToken.value = leftToken.value - self.MulDiv().value
 
+        return leftToken
 
-    def BracketsIndicies(self):
-
-        leftToken
-            
+    def ResetParser(self, newTokensArray):
+        self.idx = 0
+        self.tokensArray : list = newTokensArray
+        self.token : lexer.Token = self.tokensArray[self.idx]

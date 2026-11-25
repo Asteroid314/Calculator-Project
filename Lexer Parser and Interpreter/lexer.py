@@ -1,26 +1,12 @@
 from errors import *
-
-ARITHMETIC_OPERATORS = ['+', '-', '*', '/', '^', '!']
-INTEGERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-BRACKETS = ['(', ')']
-WHITELISTED = [' ', ',']
-FUNCTIONS = ['sin', 'cos', 'tan', 'sqrt']
-ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-
-class Token:
-    def __init__(self, type, value):
-        self.type = type
-        self.value = value
-
-    def getValue(self):
-        return self.value
+from tokens import *
+from constants import *
 
 class Lexer:
-    def __init__(self, expression):
-        self.expression = self.SetExpression(expression)
+    def __init__(self):
+        self.expression = None
         self.idx = 0
-        self.char = self.expression[self.idx]
-        self.currentNumberIndex = 0 #represents the index of the current number to be parsed, useful for multi character lexing
+        self.char = None
 
     def SetExpression(self, expr):
         if len(expr) == 0: #empty input
@@ -30,7 +16,6 @@ class Lexer:
 
     def IncrementCharacter(self) -> bool: #increments the character along the string of tokens
         self.idx += 1
-        self.currentNumberIndex += 1
         if self.idx < len(self.expression):
             self.char = self.expression[self.idx]
             return False
@@ -61,9 +46,6 @@ class Lexer:
                 return Token('FACT', '!')
 
     def interpretFunction(self):
-        self.currentNumberIndex = 0 #resetting current number index
-
-        functionsTable = FUNCTIONS #creates a new copy of the functions table in order to filter out
         result = ''
         while (self.char in ALPHABET) and (self.idx < len(self.expression)):
             result += self.char
@@ -150,3 +132,8 @@ class Lexer:
         resultantTokens.append(Token('EOL:', '-1'))
 
         return resultantTokens
+
+    def ResetInitialise(self, newExpr): #resets the lexer so that a new line is not affected by a previous one
+        self.expression = self.SetExpression(newExpr)
+        self.idx = 0
+        self.char = self.expression[self.idx]
