@@ -1,18 +1,11 @@
+from errors import *
+
 ARITHMETIC_OPERATORS = ['+', '-', '*', '/', '^', '!']
 INTEGERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 BRACKETS = ['(', ')']
-WHITELISTED = [' ']
+WHITELISTED = [' ', ',']
 FUNCTIONS = ['sin', 'cos', 'tan', 'sqrt']
 ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-
-class InvalidParenthesisError(Exception):
-    pass
-
-class MissingTokenError(Exception):
-    pass
-
-class InvalidExpressionError(Exception):
-    pass
 
 class Token:
     def __init__(self, type, value):
@@ -31,7 +24,7 @@ class Lexer:
 
     def SetExpression(self, expr):
         if len(expr) == 0: #empty input
-            raise InvalidExpressionError("Expression cannot be empty, please enter something")
+            raise SyntaxError("Expression cannot be empty, please enter something")
         else:
             return expr
 
@@ -87,7 +80,7 @@ class Lexer:
         elif result == 'sqrt':
             return Token('SQRT', 'sqrt')
         else:
-            raise InvalidExpressionError("Result not in functions")
+            raise SyntaxError("Result not in functions")
 
     def InterpretNumber(self): #is able to encode integers and floating points
         floating = False
@@ -99,7 +92,7 @@ class Lexer:
                     floating = True
                     result += self.char
                 else:
-                    raise InvalidExpressionError("This number has incorrect syntax: two floating points") #make more specific errors
+                    raise SyntaxError("This number has incorrect syntax: two floating points") #make more specific errors
             else:
                 result += self.char
 
@@ -146,7 +139,7 @@ class Lexer:
                 resultantTokens.append(self.InterpretOperation())
 
             if self.char not in ARITHMETIC_OPERATORS and self.char not in INTEGERS and self.char not in BRACKETS and self.char not in WHITELISTED and self.char not in FUNCTIONS and self.char not in ALPHABET: #this should not occur, however there will be more debug added later
-                raise InvalidExpressionError(f"This character is not in the available syntax: {self.char}")
+                raise SyntaxError(f"This character is not in the available syntax: {self.char}")
 
 
         #this part of the lexer does simple debugging based on incorrect brackets
