@@ -42,5 +42,3 @@ def log(argument, base=10):
         return _ln(argument) / LN10
     _check(argument, base)
     return _ln(argument) / _ln(base) #ts change of base
-
-print(_ln(5))
