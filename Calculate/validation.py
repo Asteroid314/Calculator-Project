@@ -44,6 +44,13 @@ def ensure_operand_count(operands, expected):
             f"Expected {expected} operands, got {len(operands)}."
         )
 
+def ensure_domain(value, max):
+    """Ensure value is less than or equal to max in magnitude."""
+    if abs(value) > max:
+        raise ValueError(
+            f"Domain error: |x| must be <= {max} (currently {value})."
+        )
+
 def get_unary_operand(operands):
     ensure_operand_count(operands, 1)
     return operands

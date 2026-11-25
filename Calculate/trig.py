@@ -1,6 +1,7 @@
 from validation import *
 from registry import register
 from constants import *
+from arithmetic import sqrt
 
 def _clean(value, eps=1e-14):
     """Reduces values below eps in magnitude to 0."""
@@ -62,22 +63,19 @@ def arcsine(*operands):
     ensure_numeric(x)
     negative = x < 0.0
     ax = abs(x)
+    ensure_domain(x, 1)
     if ax <= 0.5:
-        if ax < 1e-8:
+        if ax < 2.0 ** -26:
             return x
         z = ax * ax
-        p = z * (
-            pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5))))
-        )
-        q = 1.0 + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)))
-        result = ax + ax * (p / q)
     else:
         z = 0.5 * (1.0 - ax)
-        s = z ** 0.5
-        p = z * (
-            pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5))))
-        )
-        q = 1.0 + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)))
-        r = p / q
-        result = (PI / 2) - 2.0 * (s + s * r)
+    p = z * (ASIN_P0 + z * (ASIN_P1 + z * (ASIN_P2 + z * (ASIN_P3 + z * (ASIN_P4 + z * ASIN_P5)))))
+    q = 1.0 + z * (ASIN_Q1 + z * (ASIN_Q2 + z * (ASIN_Q3 + z * ASIN_Q4)))    
+    r = p / q
+    if ax <= 0.5:
+        result = ax + ax * r
+    else:
+        s = sqrt(z)
+        result = PI / 2 - 2.0 * (s + s * r)
     return -result if negative else result
