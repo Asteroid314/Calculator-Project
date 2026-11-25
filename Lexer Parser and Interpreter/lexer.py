@@ -1,18 +1,11 @@
+from errors import *
+
 ARITHMETIC_OPERATORS = ['+', '-', '*', '/', '^', '!']
 INTEGERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 BRACKETS = ['(', ')']
-WHITELISTED = [' ']
+WHITELISTED = [' ', ',']
 FUNCTIONS = ['sin', 'cos', 'tan', 'sqrt']
 ALPHABET = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-
-class InvalidParenthesisError(Exception):
-    pass
-
-class MissingTokenError(Exception):
-    pass
-
-class InvalidExpressionError(Exception):
-    pass
 
 class Token:
     def __init__(self, type, value):
@@ -55,9 +48,9 @@ class Lexer:
             elif originalChar == '-':
                 return Token('MINUS', '-')
             elif originalChar == '/':
-                return Token('DIVIDE', '/')
+                return Token('DIV', '/')
             elif originalChar == '*':
-                return Token('MULTIPLY', '*')
+                return Token('MUL', '*')
             elif originalChar == '^':
                 return Token('POWER', '^')
             elif originalChar == '(':
@@ -65,7 +58,7 @@ class Lexer:
             elif originalChar == ')':
                 return Token('RPAREN', ')')
             elif originalChar == '!':
-                return Token('FACTORIAL', '!')
+                return Token('FACT', '!')
 
     def interpretFunction(self):
         self.currentNumberIndex = 0 #resetting current number index
