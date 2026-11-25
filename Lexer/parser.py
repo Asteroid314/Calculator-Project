@@ -20,18 +20,47 @@ class Parser:
         else:
             raise EatingTokenError("The token type you are inputting does not match the current token type")
 
-    def factor(self):
+    def Factor(self):
         curr_token = self.token
-        if curr_token.type == 'INT' or curr_token.type == 'FLT':
-            self.EatToken()
-            return self.token
+        if curr_token.type == 'INT':
+            self.EatToken('INT')
+        elif curr_token.type == 'FLT':
+            self.EatToken('FLT')
+        else:
+            raise InvalidExpressionError("The expression is invalid at index: ", self.idx)
+        return self.token
 
-    def term(self):
-        node = self.factor()
+    def MulDiv(self):
+        leftToken = self.factor()
 
         while self.token.type == 'MUL' or self.token.type == 'DIV':
             currentToken = self.token
 
             if currentToken.type == 'MUL':
-                self.eatToken()
+                self.eatToken('MUL')
+                result = result * self.Factor()
+
+            elif currentToken.type == 'DIV':
+                self.EatToken('DIV')
+                result = result / self.Factor()
+
+    def AddSub(self):
+
+        leftToken = self.MulDiv()
+
+        while self.token.type == 'PLUS' or self.token.type == 'MINUS':
+            currentToken = self.token
+
+            if currentToken.type == 'PLUS':
+                self.EatToken('PLUS')
+                result = result + self.MulDiv()
+
+            elif currentToken.type == 'MINUS':
+                self.EatToken('MINUS')
+                result = result - self.MulDiv()
+
+
+    def BracketsIndicies(self):
+
+        leftToken
             
