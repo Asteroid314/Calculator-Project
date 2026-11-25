@@ -16,6 +16,17 @@ ARCTANS = [0.7853981633974483, 0.4636476090008061,
            0.0000000596046448, 0.0000000298023224, 
            0.0000000149011612, 0.0000000074505806]
 K = 0.6072529350088813
+# Minimax rational coefficients for [0, 0.5]
+pS0 = 1.66666666666666657415e-01
+pS1 = -3.25565818622400915405e-01
+pS2 = 2.01212532134862925881e-01
+pS3 = -4.00555345006794114027e-02
+pS4 = 7.91534994289814532176e-04
+pS5 = 3.47933107596021167570e-05
+qS1 = -2.40339491173441421878e00
+qS2 = 2.02094576023350569471e00
+qS3 = -6.88283971605453293030e-01
+qS4 = 7.70381505559019352791e-02
 
 # When the type of multiple variables could cause the same error, use this to specify the value
 class VariableTypeError(TypeError):
@@ -52,6 +63,7 @@ class Operation:
                 case "sin": return self.sin()
                 case "cos": return self.cos()
                 case "tan": return self.tan()
+                case "arcsin": return self.arcsin()
                 case "fact": return self.fact()
                 case "sqrt": return self.sqrt()
                 case "cbrt": return self.cbrt()
@@ -260,6 +272,40 @@ class Operation:
             print(f"Cannot perform operation 'tan' on non-numeric value {z}.")
         except ValueError:
             print(f"Operation 'tan' is undefined at {z} radians.")
+
+    def arcsin(self):
+        x = self.operands[0]
+        try:
+            if type(x) != int and type(x) != float:
+                raise TypeError
+            elif x < -1 or x > 1:
+                raise ValueError
+            else:
+                negative = x < 0.0
+                ax = self.abs()
+                if ax <= 0.5:
+                    if ax < 1e-8:
+                        return x
+                    z = ax * ax
+                    p = z * (
+                        pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5))))
+                    )
+                    q = 1.0 + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)))
+                    result = ax + ax * (p / q)
+                else:
+                    z = 0.5 * (1.0 - ax)
+                    s = z ** 0.5
+                    p = z * (
+                        pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5))))
+                    )
+                    q = 1.0 + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)))
+                    r = p / q
+                    result = (PI / 2) - 2.0 * (s + s * r)
+                return -result if negative else result
+        except TypeError:
+            print(f"Cannot perform operation 'arcsin' on non-numeric value {x}.")
+        except ValueError:
+            print(f"Operation 'arcsin' is undefined at {x} (x<-1 or x>1).")
 
     # Calculates the factorial of a non-negative integer
     def fact(self):
