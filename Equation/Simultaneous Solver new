@@ -1,0 +1,28 @@
+# no validation or erro handling yet
+def simultaneous():
+    unknowns = int(input("Enter the number of unknowns: "))
+    equations = []
+    for i in range(unknowns):
+        print(f"Equation {i + 1}")
+        row = []
+        for j in range(unknowns):
+            row.append(float(input(f"Coefficient {j + 1}: ")))
+        row.append(float(input("Result: ")))
+        equations.append(row)
+    return simultaneousSolver(unknowns, equations)
+    
+def simultaneousSolver(unknowns, Equations):
+    if unknowns == 1:
+        return [Equations[0][1] / Equations[0][0]]
+    for i in range(1, unknowns):
+        multiplier = Equations[i][0] / Equations[0][0]
+        for j in range(len(Equations[i])):
+            Equations[i][j] = (Equations[i][j]- multiplier * Equations[0][j])
+    nextEquations = []
+    for i in range(1, unknowns):
+        nextEquations.append(Equations[i][1:])
+    previousResults = simultaneousSolver(unknowns - 1,   nextEquations )
+    for i in range(1, unknowns):
+        Equations[0][unknowns] -= Equations[0][i] * previousResults[i - 1]
+    firstVariable = Equations[0][unknowns]/ Equations[0][0]
+    return [firstVariable] + previousResults

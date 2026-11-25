@@ -1,55 +1,11 @@
 
-# Constants
-PI = 3.141592653589793238462643
-ARCTANS = [0.7853981633974483, 0.4636476090008061, 
-           0.2449786631268641, 0.1243549945467614, 
-           0.0624188099959574, 0.0312398334302683, 
-           0.0156237286204768, 0.0078123410601011, 
-           0.0039062301319670, 0.0019531225164788, 
-           0.0009765621895593, 0.0004882812111949, 
-           0.0002441406201494, 0.0001220703118937, 
-           0.0000610351561742, 0.0000305175781155, 
-           0.0000152587890613, 0.0000076293945311, 
-           0.0000038146972656, 0.0000019073486328, 
-           0.0000009536743164, 0.0000004768371582, 
-           0.0000002384185791, 0.0000001192092896, 
-           0.0000000596046448, 0.0000000298023224, 
-           0.0000000149011612, 0.0000000074505806]
-K = 0.6072529350088813
-# Minimax rational coefficients for [0, 0.5]
-pS0 = 1.66666666666666657415e-01
-pS1 = -3.25565818622400915405e-01
-pS2 = 2.01212532134862925881e-01
-pS3 = -4.00555345006794114027e-02
-pS4 = 7.91534994289814532176e-04
-pS5 = 3.47933107596021167570e-05
-qS1 = -2.40339491173441421878e00
-qS2 = 2.02094576023350569471e00
-qS3 = -6.88283971605453293030e-01
-qS4 = 7.70381505559019352791e-02
-
-# When the type of multiple variables could cause the same error, use this to specify the value
-class VariableTypeError(TypeError):
-    def __init__(self, value, index = 0):
-        self.value = value
-        self.index = index
-        super().__init__()
-
-# When the value of multiple variables could cause the same error, use this to specify the value
-class VariableValueError(ValueError):
-    def __init__(self, value, index = 0):
-        self.value = value
-        self.index = index
-        super().__init__()
-
-
 class Operation:
     def __init__(self, name, operands):
         self.operands = operands
         self.name = name
 
     # Selects the input operation
-    def selectOp(self):
+    def select_op(self):
         try:
             match self.name:
                 case "add": return self.add()
@@ -74,91 +30,8 @@ class Operation:
             print(f"Operation '{self.name}' is invalid.")
 
     # Performs the selected operation on the input operands
-    def performOp(self):
-        return self.selectOp()
-
-    # Calculates the sum of x and y
-    def add(self):
-        x = self.operands[0]
-        y = self.operands[1]
-        try:
-            if type(x) != int and type(x) != float:
-                raise VariableTypeError(x)
-            elif type(y) != int and type(y) != float:
-                raise VariableTypeError(y)
-            else:
-                return x + y
-        except VariableTypeError as e:
-            print("Cannot perform operation 'add' on non-numeric value {e.value}.")
-
-    # Calculates the difference of x and y
-    def sub(self):
-        x = self.operands[0]
-        y = self.operands[1]
-        try:
-            if type(x) != int and type(x) != float:
-                raise VariableTypeError(x)
-            elif type(y) != int and type(y) != float:
-                raise VariableTypeError(y)
-            else:
-                return x - y
-        except VariableTypeError as e:
-            print("Cannot perform operation 'sub' on non-numeric value {e.value}.")
-
-    # Calculates the product of x and y
-    def mult(self):
-        x = self.operands[0]
-        y = self.operands[1]
-        try:
-            if type(x) != int and type(x) != float:
-                raise VariableTypeError(x)
-            elif type(y) != int and type(y) != float:
-                raise VariableTypeError(y)
-            else:
-                return x * y
-        except VariableTypeError as e:
-            print("Cannot perform operation 'mult' on non-numeric value {e.value}.")
-
-    # Calculates the quotient of x and y
-    def div(self):
-        x = self.operands[0]
-        y = self.operands[1]
-        try:
-            if type(x) != int and type(x) != float:
-                raise VariableTypeError(x)
-            elif type(y) != int and type(y) != float:
-                raise VariableTypeError(y)
-            elif x == 0 and y == 0:
-                raise ValueError
-            elif y == 0:
-                raise ZeroDivisionError
-            else:
-                return x / y
-        except VariableTypeError as e:
-            print(f"Cannot perform operation 'div' on non-numeric value {e.value}.")
-        except ValueError:
-            print("Operation 'div' (x/y) is indeterminate at x=0, y=0.")
-        except ZeroDivisionError:
-            print(f"Operation 'div' (x/y) is undefined at y={y}.")
-
-    # Calculates the result of raising x to the yth power
-    def pow(self):
-        x = self.operands[0]
-        y = self.operands[1]
-        try:
-            if type(x) != int and type(x) != float:
-                raise VariableTypeError(x)
-            elif type(y) != int and type(y) != float:
-                raise VariableTypeError(y)
-            elif x == y == 0:
-                raise ValueError
-            else:
-                return x ** y
-        except VariableTypeError as e:
-            print(f"Cannot perform operation 'pow' on non-numeric value {e.value}.")
-        except ValueError:
-            print("Operation 'pow' (x^y) is undefined at x=0, y=0.")
-
+    def perform_op(self):
+        return self.select_op()
     
     # Calculates the least integer greater than or equal to x
     def ceil(self):
@@ -224,7 +97,7 @@ class Operation:
             x, y = K, 0
 
         # Main loop - converge on exact angle
-        for i in range(55):
+        for i in range(CORDIC_ITERATIONS):
             step = ARCTANS[i] if i < len(ARCTANS) else (2 ** -i)
             if z >= 0:
                 xNext, yNext, zNext = x - (y * (2 ** -i)), y + (x * (2 ** -i)), z - step
@@ -281,27 +154,7 @@ class Operation:
             elif x < -1 or x > 1:
                 raise ValueError
             else:
-                negative = x < 0.0
-                ax = self.abs()
-                if ax <= 0.5:
-                    if ax < 1e-8:
-                        return x
-                    z = ax * ax
-                    p = z * (
-                        pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5))))
-                    )
-                    q = 1.0 + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)))
-                    result = ax + ax * (p / q)
-                else:
-                    z = 0.5 * (1.0 - ax)
-                    s = z ** 0.5
-                    p = z * (
-                        pS0 + z * (pS1 + z * (pS2 + z * (pS3 + z * (pS4 + z * pS5))))
-                    )
-                    q = 1.0 + z * (qS1 + z * (qS2 + z * (qS3 + z * qS4)))
-                    r = p / q
-                    result = (PI / 2) - 2.0 * (s + s * r)
-                return -result if negative else result
+
         except TypeError:
             print(f"Cannot perform operation 'arcsin' on non-numeric value {x}.")
         except ValueError:
