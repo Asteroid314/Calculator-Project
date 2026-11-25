@@ -4,7 +4,7 @@ class InvalidParenthesisError(Exception):
 class MissingTokenError(Exception):
     pass
 
-class SyntaxError(Exception):
+class InvalidExpressionError(Exception):
     pass
 
 class EatingTokenError(Exception):
