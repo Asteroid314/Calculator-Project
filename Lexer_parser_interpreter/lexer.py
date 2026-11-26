@@ -67,9 +67,16 @@ class Lexer:
     def InterpretNumber(self): #is able to encode integers and floating points
         floating = False
         result = ''
+        negative = False
 
-        while (self.char in INTEGERS or self.char == '.') and (self.idx < len(self.expression)):
-            if self.char == '.': #checks for floating point symbol
+        while (self.char in INTEGERS or self.char == '.' or self.char == '-') and (self.idx < len(self.expression)):
+            
+            if len(result) == 0 and self.char == '-': #first character
+                negative = not negative
+            elif self.char == '-' and len(result) > 0: #error as - inside number
+                raise InvalidExpressionError("Negative is not first, must be")
+            
+            elif self.char == '.': #checks for floating point symbol
                 if not floating:
                     floating = True
                     result += self.char
@@ -82,10 +89,14 @@ class Lexer:
 
         #after this has ran, the current char will be the one after the end of number
         
-        if floating:
+        if floating and not negative:
             return Token('FLT', float(result))
-        else:
+        elif floating and negative:
+            return Token('FLT', 0 - float(result))
+        elif not floating and not negative:
             return Token('INT', int(result))
+        else:
+            return Token('INT', 0 - int(result))
         
     def InterpretVariable(self):
         currChar = self.char
@@ -105,7 +116,7 @@ class Lexer:
                 if self.idx >= len(self.expression):
                     break
 
-            if self.char in INTEGERS:
+            if self.char in INTEGERS or self.char == '-':
                 resultantTokens.append(self.InterpretNumber())
 
             if self.char in ARITHMETIC_OPERATORS:
