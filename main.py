@@ -1,0 +1,2 @@
+from Lexer_parser_interpreter.terminal import RunTerminal
+RunTerminal()

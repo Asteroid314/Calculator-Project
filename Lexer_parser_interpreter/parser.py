@@ -1,5 +1,6 @@
-from errors import *
+from .errors import *
 import lexer
+from Calculate.registry import execute
 
 class Parser:
     def __init__(self):
@@ -42,7 +43,7 @@ class Parser:
 
             elif currentToken.type == 'DIV':
                 self.EatToken('DIV')
-                leftToken.value = leftToken.value / self.Factor().value
+                leftToken.value = execute("divide", leftToken.value, currentToken.value)
 
         return leftToken
 

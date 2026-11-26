@@ -1,4 +1,4 @@
-import lexer, parser
+from . import lexer, parser
 
 def RunTerminal():
 
@@ -13,5 +13,3 @@ def RunTerminal():
         myParser.ResetParser(lexedTokens)
         parsedResult = myParser.AddSub()
         print(parsedResult.value)
-
-RunTerminal()

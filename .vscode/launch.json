@@ -2,14 +2,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run current file",
+            "name": "Run terminal module",
             "type": "debugpy",
             "request": "launch",
-            "program": "${file}",
-            "cwd": "${workspaceFolder}",
-            "env": {
-                "PYTHONPATH": "${workspaceFolder}"
-            }
+            "module": "Lexer_parser_interpreter.terminal",
+            "console": "integratedTerminal"
         }
     ]
 }

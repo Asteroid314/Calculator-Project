@@ -1,5 +1,5 @@
-from errors import *
-from tokens import *
+from .errors import *
+from .tokens import *
 from constants import *
 
 class Lexer:
