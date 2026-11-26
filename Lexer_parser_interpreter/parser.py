@@ -30,35 +30,21 @@ class Parser:
             self.EatToken('FLT')
         elif curr_token.type == 'LPAREN':
             self.EatToken('LPAREN')
-        elif curr_token.type == 'RPAREN':
+            result = self.AddSub()
             self.EatToken('RPAREN')
+            return result
         else:
             raise InvalidExpressionError("The expression is invalid at index: ", self.idx)
         
         return curr_token
-    
-    def Brackets(self):
-        leftToken = self.Factor()
-        
-        if leftToken.type == 'LPAREN':
-            while self.token.type != 'RPAREN':
-                if self.token.type == 'LPAREN':
-                    self.Brackets()
-                
-                print(self.token.type, self.token.value)
-                    
-                leftToken = self.AddSub()
-                
-        return leftToken
-        
 
     def Power(self):
-        leftToken = self.Brackets()
+        leftToken = self.Factor()
 
         while self.token.type == 'POWER':
             self.EatToken('POWER')
             
-            leftToken.value = execute("power", leftToken.value, self.Brackets().value)
+            leftToken.value = execute("power", leftToken.value, self.Factor().value)
 
         return leftToken
 
