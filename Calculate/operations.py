@@ -73,26 +73,6 @@ class Operation:
         except TypeError:
             print(f"Cannot perform operation 'floor' on non-numeric value {x}.")
 
-    # Calculates the principal square root of a positive number s
-    def sqrt(self):
-        s = self.operands[0]
-        try:
-            if type(s) != int and type(s) != float:
-                raise TypeError
-            elif s < 0:
-                raise ValueError
-            else:
-                xNext = 0.1 if s != 0.1 else 0.2
-                x = s
-                while xNext != x:
-                    x = xNext
-                    xNext = (x + s / x) / 2
-                return xNext
-        except TypeError:
-            print(f"Cannot perform operation 'sqrt' on non-numeric value {s}.")
-        except ValueError:
-            print(f"Cannot perform operation 'sqrt' on negative number {s}.")
-
     def cbrt(self):
         c = self.operands[0]
         try:

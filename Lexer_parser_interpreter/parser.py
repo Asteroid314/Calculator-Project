@@ -77,4 +77,4 @@ class Parser:
     def ResetParser(self, newTokensArray):
         self.idx = 0
         self.tokensArray : list = newTokensArray
-        self.token : lexer.Token = self.tokensArray[self.idx]
+        self.token : Lexer.Token = self.tokensArray[self.idx]
