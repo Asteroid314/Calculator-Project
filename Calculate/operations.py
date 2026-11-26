@@ -71,37 +71,7 @@ class Operation:
                     return int_x - 1
                 return int_x
         except TypeError:
-            print(f"Cannot perform operation 'floor' on non-numeric value {x}.")
-
-    def nroot(self):
-        n = self.operands[0] # Index (the nth root is taken)
-        p = self.operands[1] # Radicand (the root of p is taken)
-        try:
-            if type(n) != int and type(n) != float:
-                raise VariableTypeError(n)
-            elif type(p) != int and type(p) != float:
-                raise VariableTypeError(p)
-            elif type(n) != int:
-                raise NotImplementedError
-            elif n == 0 or (n % 2 == 0 and p < 0):
-                raise ValueError
-            else:
-                xNext = 0.1 if p != 0.1 else 0.2
-                x = p
-                while xNext != x:
-                    x = xNext
-                    xNext = ((p / (x ** (n - 1))) + (x * (n - 1))) / n
-                return xNext
-        except VariableTypeError as e:
-            print(f"Cannot perform operation 'nroot' on non-numeric value {e.value}.")
-        except NotImplementedError:
-            print("Non-integer roots have not yet been implemented.")
-        except ValueError:
-            if n == 0:
-                print("Operation 'nroot' (p^(1/n)) is undefined at n=0.")
-            else:
-                print(f"Operation 'nroot' (p^(1/n)) is undefined for negative p with even n.")
-            
+            print(f"Cannot perform operation 'floor' on non-numeric value {x}.")          
 
     # Calculates the number of combinations
     def choose(self):

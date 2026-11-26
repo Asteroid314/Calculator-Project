@@ -59,6 +59,21 @@ def ensure_odd_if_neg(index, radicand):
                 f"Even root of negative integer is undefined."
             )
 
+def check_real(x, name="x", allow_inf=False):
+    """Return x unchanged if it is a valid real number, else raise.
+       
+    TypeError  : not an int or float (bool rejected on purpose).
+    ValueError : NaN, or an infinity when allow_inf is False.
+    """
+    if isinstance(x, bool) or not isinstance(x, (int, float)):
+        raise TypeError(f"{name} must be a real number, got {type(x).__name__}")
+    if isinstance(x, float):
+        if x != x:
+            raise ValueError(f"{name} must not be NaN")
+        if not allow_inf and (x == INF or x == -INF):
+            raise ValueError(f"{name} must be finite")
+    return x
+
 def validate_nth_root(s, n):
     """Return (s, n) as floats, or raise TypeError / ValueError."""
     for name, v in (("s", s), ("n", n)):
