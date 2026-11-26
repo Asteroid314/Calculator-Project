@@ -1,3 +1,3 @@
-import arithmetic
-import trig
-import logs
+from .arithmetic import *
+from .trig import *
+from .logs import *

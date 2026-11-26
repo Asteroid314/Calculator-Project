@@ -1,6 +1,6 @@
 from .errors import *
 from .tokens import *
-from constants import *
+from .constants import *
 
 class Lexer:
     def __init__(self):

@@ -1,4 +1,4 @@
-from exceptions import VariableValueError, VariableTypeError
+from .exceptions import VariableValueError, VariableTypeError
 
 def ensure_numeric(value, index = 0):
     """Ensure value is of type int or float."""

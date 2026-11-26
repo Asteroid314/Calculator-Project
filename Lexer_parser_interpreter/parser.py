@@ -1,5 +1,5 @@
 from .errors import *
-import lexer
+from .lexer import *
 from Calculate.registry import execute
 
 class Parser:
@@ -39,11 +39,11 @@ class Parser:
 
             if currentToken.type == 'MUL':
                 self.EatToken('MUL')
-                leftToken.value = leftToken.value * self.Factor().value
+                leftToken.value = execute("multiply", leftToken.value, self.Factor().value)
 
             elif currentToken.type == 'DIV':
                 self.EatToken('DIV')
-                leftToken.value = execute("divide", leftToken.value, currentToken.value)
+                leftToken.value = execute("divide", leftToken.value, self.Factor().value)
 
         return leftToken
 
@@ -55,11 +55,11 @@ class Parser:
 
             if currentToken.type == 'PLUS':
                 self.EatToken('PLUS')
-                leftToken.value = leftToken.value + self.MulDiv().value
+                leftToken.value = execute("add", leftToken.value, self.MulDiv().value)
 
             elif currentToken.type == 'MINUS':
                 self.EatToken('MINUS')
-                leftToken.value = leftToken.value - self.MulDiv().value
+                leftToken.value = execute("subtract", leftToken.value, self.MulDiv().value)
 
         return leftToken
 

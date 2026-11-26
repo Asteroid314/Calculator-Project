@@ -1,5 +1,5 @@
-from validation import *
-from registry import register
+from .validation import *
+from .registry import register
 
 @register("add")
 def add(*operands):

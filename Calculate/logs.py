@@ -1,4 +1,4 @@
-from constants import *
+from .constants import *
 
 def _check(argument, base):
     # check to ensure argument is positive (not including 0) and finite and is a number, and also checks if the base is not 1 and is also + and finite
