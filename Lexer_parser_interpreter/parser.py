@@ -31,19 +31,30 @@ class Parser:
             raise InvalidExpressionError("The expression is invalid at index: ", self.idx)
         return curr_token
 
-    def MulDiv(self):
+    def Power(self):
         leftToken = self.Factor()
+
+        while self.token.type == 'POWER':
+            currentToken = self.token
+
+            self.EatToken('POWER')
+            leftToken.value = execute("power", leftToken.value, self.Factor().value)
+
+        return leftToken
+
+    def MulDiv(self):
+        leftToken = self.Power()
 
         while self.token.type == 'MUL' or self.token.type == 'DIV':
             currentToken = self.token
 
             if currentToken.type == 'MUL':
                 self.EatToken('MUL')
-                leftToken.value = execute("multiply", leftToken.value, self.Factor().value)
+                leftToken.value = execute("multiply", leftToken.value, self.Power().value)
 
             elif currentToken.type == 'DIV':
                 self.EatToken('DIV')
-                leftToken.value = execute("divide", leftToken.value, self.Factor().value)
+                leftToken.value = execute("divide", leftToken.value, self.Power().value)
 
         return leftToken
 
