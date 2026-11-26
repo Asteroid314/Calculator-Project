@@ -2,10 +2,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run terminal module",
+            "name": "Run Calculator Main",
             "type": "debugpy",
             "request": "launch",
-            "module": "Lexer_parser_interpreter.terminal",
+            "program": "${workspaceFolder}/main.py",
+            "cwd": "${workspaceFolder}",
             "console": "integratedTerminal"
         }
     ]
