@@ -47,7 +47,7 @@ class Operation:
             print(f"Cannot perform operation 'ceil' on non-numeric value {x}.")
 
     # Calculates the magnitude of x
-    def abs(self):
+    def absolute(self):
         x = self.operands[0]
         try:
             if type(x) != int and type(x) != float:
@@ -72,21 +72,6 @@ class Operation:
                 return int_x
         except TypeError:
             print(f"Cannot perform operation 'floor' on non-numeric value {x}.")
-
-    def cbrt(self):
-        c = self.operands[0]
-        try:
-            if type(c) != int and type(c) != float:
-                raise TypeError
-            else:
-                xNext = 0.1 if c != 0.1 else 0.2
-                x = c
-                while xNext != x:
-                    x = xNext
-                    xNext = ((c / (x ** 2)) + (2 * x)) / 3
-                return xNext
-        except TypeError:
-            print(f"Cannot perform operation 'cbrt' on non-numeric value {c}.")
 
     def nroot(self):
         n = self.operands[0] # Index (the nth root is taken)

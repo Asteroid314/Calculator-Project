@@ -1,4 +1,5 @@
 from .exceptions import VariableValueError, VariableTypeError
+from .constants import *
 
 def ensure_numeric(value, index = 0):
     """Ensure value is of type int or float."""
@@ -50,6 +51,35 @@ def ensure_domain(value, max):
         raise ValueError(
             f"Domain error: |x| must be <= {max} (currently {value})."
         )
+
+def ensure_odd_if_neg(index, radicand):
+    if radicand < 0:
+        if index % 2 == 0:
+            raise ValueError(
+                f"Even root of negative integer is undefined."
+            )
+
+def validate_nth_root(s, n):
+    """Return (s, n) as floats, or raise TypeError / ValueError."""
+    for name, v in (("s", s), ("n", n)):
+        if isinstance(v, bool) or not isinstance(v, (int, float)):
+            raise TypeError(f"{name} must be a real number, got {type(v).__name__}")
+    try:
+        s, n = float(s), float(n)
+    except OverflowError:
+        raise ValueError("s and n must be representable as finite floats") from None
+
+    if s != s or n != n:
+        raise ValueError("s and n must not be NaN")
+    if s == INF or s == -INF or n == INF or n == -INF:
+        raise ValueError("s and n must be finite")
+    if n == 0.0:
+        raise ValueError("n must be non-zero")
+    if s < 0.0 and (n != int(n) or int(n) % 2 == 0):
+        raise ValueError("negative s requires an odd integer n")
+    if s == 0.0 and n < 0.0:
+        raise ValueError("0 has no root with negative n (division by zero)")
+    return s, n
 
 def get_unary_operand(operands):
     ensure_operand_count(operands, 1)
