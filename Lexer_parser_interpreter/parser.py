@@ -20,6 +20,7 @@ class Parser:
             self.IncrementCharacter()
         else:
             raise EatingTokenError("The token type you are inputting does not match the current token type")
+        
 
     def Factor(self):
         curr_token = self.token
@@ -27,18 +28,37 @@ class Parser:
             self.EatToken('INT')
         elif curr_token.type == 'FLT':
             self.EatToken('FLT')
+        elif curr_token.type == 'LPAREN':
+            self.EatToken('LPAREN')
+        elif curr_token.type == 'RPAREN':
+            self.EatToken('RPAREN')
         else:
             raise InvalidExpressionError("The expression is invalid at index: ", self.idx)
+        
         return curr_token
+    
+    def Brackets(self):
+        leftToken = self.Factor()
+        
+        if leftToken.type == 'LPAREN':
+            while self.token.type != 'RPAREN':
+                if self.token.type == 'LPAREN':
+                    self.Brackets()
+                
+                print(self.token.type, self.token.value)
+                    
+                leftToken = self.AddSub()
+                
+        return leftToken
+        
 
     def Power(self):
-        leftToken = self.Factor()
+        leftToken = self.Brackets()
 
         while self.token.type == 'POWER':
-            currentToken = self.token
-
             self.EatToken('POWER')
-            leftToken.value = execute("power", leftToken.value, self.Factor().value)
+            
+            leftToken.value = execute("power", leftToken.value, self.Brackets().value)
 
         return leftToken
 
@@ -77,4 +97,4 @@ class Parser:
     def ResetParser(self, newTokensArray):
         self.idx = 0
         self.tokensArray : list = newTokensArray
-        self.token : lexer.Token = self.tokensArray[self.idx]
+        self.token : Token = self.tokensArray[self.idx]
