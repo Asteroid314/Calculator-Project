@@ -63,20 +63,19 @@ class Lexer:
             return Token('SQRT', 'sqrt')
         else:
             raise InvalidExpressionError("Result not in functions")
+        
 
     def InterpretNumber(self): #is able to encode integers and floating points
         floating = False
         result = ''
         negative = False
 
-        while (self.char in INTEGERS or self.char == '.' or self.char == '-') and (self.idx < len(self.expression)):
-            
-            if len(result) == 0 and self.char == '-': #first character
-                negative = not negative
-            elif self.char == '-' and len(result) > 0: #error as - inside number
-                raise InvalidExpressionError("Negative is not first, must be")
-            
-            elif self.char == '.': #checks for floating point symbol
+        while self.char == '-': #effectively just handles grouped negatives e.g 4--4
+            negative = not negative
+            self.IncrementCharacter()
+
+        while (self.char in INTEGERS or self.char == '.') and (self.idx < len(self.expression)):
+            if self.char == '.': #checks for floating point symbol
                 if not floating:
                     floating = True
                     result += self.char
