@@ -45,7 +45,7 @@ class Lexer:
             elif originalChar == '!':
                 return Token('FACT', '!')
 
-    def interpretFunction(self):
+    def InterpretFunction(self):
         result = ''
         while (self.char in ALPHABET) and (self.idx < len(self.expression)):
             result += self.char
@@ -86,7 +86,11 @@ class Lexer:
             return Token('FLT', float(result))
         else:
             return Token('INT', int(result))
-
+        
+    def InterpretVariable(self):
+        currChar = self.char
+        self.IncrementCharacter()
+        return Variable(currChar) #there is simply no point to check, as all variables have the same type anyways
 
 
     def ParseText(self): #iterates over tokens and checks for incorrect syntaxing
@@ -108,7 +112,10 @@ class Lexer:
                 resultantTokens.append(self.InterpretOperation())
 
             if self.char in ALPHABET:
-                resultantTokens.append(self.interpretFunction())
+                resultantTokens.append(self.InterpretFunction())
+                
+            elif self.char in VARIABLES:
+                resultantTokens.append(self.InterpretVariable())
 
             if self.char in BRACKETS:
                 if self.char == '(':

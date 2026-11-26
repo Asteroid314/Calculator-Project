@@ -7,9 +7,10 @@ class Token:
         return self.value
 
 class Variable:
-    def __init__(self, type, value):
-        self.type = type
-        self.value = value
+    def __init__(self, name):
+        self.name = name
+        self.type = 'VAR'
+        self.value = 0
 
     def getValue(self):
         return self.value
