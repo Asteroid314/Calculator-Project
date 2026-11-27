@@ -27,3 +27,18 @@ def choose(n, r):
     for i in range(1, r + 1):
         result = (result * (n - i + 1)) // i
     return result
+
+@register("permutation")
+def permutation(n, k):
+    """Return n!/(n-k)! or 0 when k>n, provided n, k are integers >= 0."""
+    n = ensure_integer(n, "n", allow_inf=False)
+    k = ensure_integer(k, "k", allow_inf=False)
+    [n] = ensure_range(0, INF, True, False, [n])
+    [k] = ensure_range(0, INF, True, False, [k])
+
+    if k > n:
+        return 0
+    result = 1
+    for i in range(0, k):
+        result *= (n - i)
+    return result
