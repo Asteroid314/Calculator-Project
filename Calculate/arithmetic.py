@@ -46,7 +46,8 @@ def power(x, y):
 
     return x ** y
     
-def modulus(x, y): #x larger val
-    while (x - y) > 0:
-        x = x - y
-    return x
+@register("modulus")
+def modulus(x, y):
+    """Return remainder of x / y. x, y must satisfy various criteria (see validate_divide)."""
+    x, y = validate_divide(x, y)
+    return ((x / y) - (x // y)) * y
