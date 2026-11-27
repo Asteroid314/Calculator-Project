@@ -41,11 +41,10 @@ class Parser:
     def Power(self):
         leftToken = self.Factor()
 
-        while self.token.type == 'POWER':
+        if self.token.type == 'POWER':
             self.EatToken('POWER')
-            
-            leftToken.value = execute("power", leftToken.value, self.Factor().value)
 
+            leftToken.value = execute("power", leftToken.value, self.Power().value)
         return leftToken
 
     def MulDiv(self):

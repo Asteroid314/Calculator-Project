@@ -18,8 +18,7 @@ def ensure_range(min, max, min_inclusive : bool, max_inclusive : bool, *operands
 def ensure_not_all(val, *operands):
     """Return all values if not all equal to val.
     Else raise ValueError"""
-    for i in range(len(operands)):
-        operand = operands[i]
+    for operand in operands:
         if operand != val:
             return operands
     raise ValueError(f"Not all operands can equal {val}.")
@@ -72,7 +71,8 @@ def validate_nth_root(s, n):
 def validate_power(x, y):
     x = check_real(x, "x", allow_inf=True)
     y = check_real(y, "y", allow_inf=True)
-    x, y = ensure_not_all(0, x, y)
+    res = ensure_not_all(0, x, y)
+    x, y = res[0], res[1]
     if x == 1 and y == INF:
         raise ValueError("x, y cannot be 1, INF")
     elif x == INF and y == 0:

@@ -14,7 +14,8 @@ def subtract(x, y):
 
     x = check_real(x, "x", allow_inf=True)
     y = check_real(y, "y", allow_inf=True)
-    x, y = ensure_not_all(INF, x, y)
+    res = ensure_not_all(INF, x, y)
+    x, y = res[0], res[1]
 
     return x - y
 
@@ -31,7 +32,8 @@ def divide(x, y):
     x = check_real(x, "x", allow_inf=True)
     y = check_real(y, "y", allow_inf=True)
     y = ensure_not_all(0, y)[0]
-    x, y = ensure_not_all(INF, x, y)
+    res = ensure_not_all(INF, x, y)
+    x, y = res[0], res[1]
 
     return x / y
 
