@@ -1,6 +1,6 @@
 from .constants import *
 
-def ensure_range(min, max, min_inclusive : bool, max_inclusive : bool, *operands) -> tuple:
+def ensure_range(min, max, min_inclusive : bool, max_inclusive : bool, operands : list) -> list:
     """Return all operands if they fall into the required range.
     Else raise ValueError."""
     for operand in operands:
