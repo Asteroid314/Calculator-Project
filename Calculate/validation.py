@@ -19,12 +19,11 @@ def ensure_integer(x, name="x", allow_inf=True):
         raise ValueError("{name} must be a finite integer")
     elif allow_inf and not isinstance(x, int):
         raise ValueError("{name} must be an integer")
-    return x
-        
+    return x      
 
-def ensure_not_all(val, *operands):
-    """Return all values if not all equal to val.
-    Else raise ValueError"""
+def ensure_not_all(val, operands : list):
+    """Return operands if not all equal to val.
+    Else raise ValueError."""
     for operand in operands:
         if operand != val:
             return operands
@@ -78,8 +77,7 @@ def validate_nth_root(s, n):
 def validate_power(x, y):
     x = check_real(x, "x", allow_inf=True)
     y = check_real(y, "y", allow_inf=True)
-    res = ensure_not_all(0, x, y)
-    x, y = res[0], res[1]
+    x, y = ensure_not_all(0, [x, y])
     if x == 1 and y == INF:
         raise ValueError("x, y cannot be 1, INF")
     elif x == INF and y == 0:

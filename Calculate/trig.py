@@ -49,7 +49,7 @@ def cosine(x):
 def tangent(x):
     x = check_real(x, "x")
     cordic_result = _cordic_cos_sin(x)
-    cordic_result[0] = ensure_not_all(0, cordic_result[0])[0]
+    cordic_result[0] = ensure_not_all(0, [cordic_result[0]])
     return cordic_result[1] / cordic_result[0]
 
 @register("arcsine")
