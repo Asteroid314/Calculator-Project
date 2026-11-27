@@ -30,48 +30,7 @@ class Operation:
 
     # Performs the selected operation on the input operands
     def perform_op(self):
-        return self.select_op()
-    
-    # Calculates the least integer greater than or equal to x
-    def ceil(self):
-        x = self.operands[0]
-        try:
-            if type(x) != int and type(x) != float:
-                raise TypeError
-            else:
-                int_x = int(x)
-                if x > int_x:
-                    return int_x + 1
-                return int_x
-        except TypeError:
-            print(f"Cannot perform operation 'ceil' on non-numeric value {x}.")
-
-    # Calculates the magnitude of x
-    def absolute(self):
-        x = self.operands[0]
-        try:
-            if type(x) != int and type(x) != float:
-                raise TypeError
-            else:
-                if x < 0:
-                    return -x
-                return x
-        except TypeError:
-            print(f"Cannot perform operation 'abs' on non-numeric value {x}.")
-
-    # Calculates the greatest integer less than or equal to x
-    def floor(self):
-        x = self.operands[0]
-        try:
-            if type(x) != int and type(x) != float:
-                raise TypeError
-            else:
-                int_x = int(x)
-                if x < int_x:
-                    return int_x - 1
-                return int_x
-        except TypeError:
-            print(f"Cannot perform operation 'floor' on non-numeric value {x}.")          
+        return self.select_op()      
 
     # Calculates the number of combinations
     def choose(self):

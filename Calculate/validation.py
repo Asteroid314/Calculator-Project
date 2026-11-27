@@ -14,6 +14,14 @@ def ensure_range(min, max, min_inclusive : bool, max_inclusive : bool, *operands
             raise ValueError(f"All operands must be less than {max}.")
     return operands
 
+def ensure_integer(x, name="x", allow_inf=True):
+    if not allow_inf and (x == INF or x == -INF):
+        raise ValueError("{name} must be a finite integer")
+    elif allow_inf and not isinstance(x, int):
+        raise ValueError("{name} must be an integer")
+    return x
+        
+
 def ensure_not_all(val, *operands):
     """Return all values if not all equal to val.
     Else raise ValueError"""
