@@ -46,3 +46,7 @@ def power(x, y):
 
     return x ** y
     
+def modulus(x, y): #x larger val
+    while (x - y) > 0:
+        x = x - y
+    return x

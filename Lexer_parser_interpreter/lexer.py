@@ -44,6 +44,8 @@ class Lexer:
                 return Token('RPAREN', ')')
             elif originalChar == '!':
                 return Token('FACT', '!')
+            elif originalChar == '%':
+                return Token('MOD', '%')
 
     def InterpretFunction(self):
         result = ''

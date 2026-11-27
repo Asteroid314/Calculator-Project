@@ -5,7 +5,7 @@ from .registry import register
 def factorial(x):
     """Return product of integers 1 to x, provided x is an integer >= 0."""
     x = ensure_integer(x, "x", allow_inf=True)
-    x = ensure_range(0, INF, True, True, x)
+    x = ensure_range(0, INF, True, True, x)[0]
 
     if x == 0 or x == 1:
         return 1

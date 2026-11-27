@@ -14,6 +14,10 @@ class Parser:
             self.token = self.tokensArray[self.idx]
             return self.token
         return False
+    
+    def Peek(self, forwards):
+        
+        return self.tokensArray[self.idx + 1].value
 
     def EatToken(self, tokenType):
         if self.token.type == tokenType: #therefore it is correct
@@ -26,6 +30,11 @@ class Parser:
         curr_token = self.token
         if curr_token.type == 'INT':
             self.EatToken('INT')
+            
+            if self.token.value == '!': #a factorial has occurred
+                curr_token.value = execute("factorial", curr_token.value)
+                self.EatToken('FACT')
+                
         elif curr_token.type == 'FLT':
             self.EatToken('FLT')
         elif curr_token.type == 'LPAREN':
@@ -45,6 +54,7 @@ class Parser:
             self.EatToken('POWER')
 
             leftToken.value = execute("power", leftToken.value, self.Power().value)
+            
         return leftToken
 
     def MulDiv(self):
@@ -60,6 +70,10 @@ class Parser:
             elif currentToken.type == 'DIV':
                 self.EatToken('DIV')
                 leftToken.value = execute("divide", leftToken.value, self.Power().value)
+                
+            elif currentToken.type == 'MOD':
+                self.EatToken('MOD')
+                #add mod function here
 
         return leftToken
 
