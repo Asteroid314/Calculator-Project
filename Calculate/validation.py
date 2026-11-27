@@ -1,49 +1,28 @@
 from .exceptions import VariableValueError, VariableTypeError
 from .constants import *
 
-def ensure_numeric(value, index = 0):
-    """Ensure value is of type int or float."""
-    if not isinstance(value, (int, float)):
-        raise VariableTypeError(value, index)
+def ensure_range(min, max, min_inclusive : bool, max_inclusive : bool, *operands) -> tuple:
+    """Return all operands if they fall into the required range.
+    Else raise ValueError."""
+    for operand in operands:
+        if min_inclusive and operand < min:
+            raise ValueError(f"All operands must be greater than or equal to {min}.")
+        elif operand <= min:
+            raise ValueError(f"All operands must be greater than {min}.")
+        elif max_inclusive and operand > max:
+            raise ValueError(f"All operands must be less than or equal to {max}.")
+        elif operand >= max:
+            raise ValueError(f"All operands must be less than {max}.")
+    return operands
 
-def ensure_integer(value, index = 0):
-    """Ensure value is of type int."""
-    if not isinstance(value, int):
-        raise VariableTypeError(value, index)
-
-def ensure_non_negative(value, index = 0):
-    """Ensure value is greater than or equal to zero."""
-    if value < 0:
-        raise VariableValueError(value, index)
-
-def ensure_probability(value, index = 0):
-    """Ensure value is in [-1, 1]."""
-    if value < -1 or value > 1:
-        raise VariableValueError(value, index)
-
-def ensure_not_zero(value, index = 0):
-    """Ensure value is not zero."""
-    if value == 0:
-        raise ZeroDivisionError
-
-def ensure_not_both_zero(value0, value1):
-    """Ensure two values are not both zero."""
-    if value0 == 0 and value1 == 0:
-        raise ValueError(
-            "Both values cannot be zero."
-        )
-
-def ensure_positive(value, index = 0):
-    """Ensure value is greater than zero."""
-    if value <= 0:
-        raise VariableValueError(value, index)
-
-def ensure_operand_count(operands, expected):
-    """Ensure the expected number of operands have been received."""
-    if len(operands) != expected:
-        raise ValueError(
-            f"Expected {expected} operands, got {len(operands)}."
-        )
+def ensure_not_all(val, *operands):
+    """Return all values if not all equal to val.
+    Else raise ValueError"""
+    for i in range(len(operands)):
+        operand = operands[i]
+        if operand != val:
+            return operands
+    raise ValueError(f"Not all operands can equal {val}.")
 
 def ensure_domain(value, max):
     """Ensure value is less than or equal to max in magnitude."""
@@ -51,13 +30,7 @@ def ensure_domain(value, max):
         raise ValueError(
             f"Domain error: |x| must be <= {max} (currently {value})."
         )
-
-def ensure_odd_if_neg(index, radicand):
-    if radicand < 0:
-        if index % 2 == 0:
-            raise ValueError(
-                f"Even root of negative integer is undefined."
-            )
+    return value
 
 def check_real(x, name="x", allow_inf=False):
     """Return x unchanged if it is a valid real number, else raise.
@@ -96,10 +69,27 @@ def validate_nth_root(s, n):
         raise ValueError("0 has no root with negative n (division by zero)")
     return s, n
 
-def get_unary_operand(operands):
-    ensure_operand_count(operands, 1)
-    return operands
+def validate_power(x, y):
+    x = check_real(x, "x", allow_inf=True)
+    y = check_real(y, "y", allow_inf=True)
+    x, y = ensure_not_all(0, x, y)
+    if x == 1 and y == INF:
+        raise ValueError("x, y cannot be 1, INF")
+    elif x == INF and y == 0:
+        raise ValueError("x, y cannot be INF, 0")
+    elif x == 0 and y < 0:
+        raise ValueError("x cannot equal 0 if y<0")
+    elif x < 0 and type(y) != int:
+        raise ValueError("x cannot be negative if y is not an integer")
+    else:
+        return x, y
 
-def get_binary_operands(operands):
-    ensure_operand_count(operands, 2)
-    return operands
+def validate_multiply(x, y):
+    """Return x, y if valid (real and not 0 and INF).
+    Else raise ValueError"""
+    x = check_real(x, "x", allow_inf=True)
+    y = check_real(y, "y", allow_inf=True)
+    if (x == 0 and y == INF) or (x == INF and y == 0):
+        raise ValueError("x, y cannot be 0, INF in either order")
+    else:
+        return x, y

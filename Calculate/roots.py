@@ -3,10 +3,9 @@ from .validation import *
 from .constants import *
 
 @register("sqrt")
-def sqrt(*operands):
-    s = get_unary_operand(operands)
-    ensure_numeric(s)
-    ensure_non_negative(s)
+def sqrt(s):
+    s = check_real(s, "s", allow_inf=True)
+    s = ensure_range(0, INF, True, True, s)
     if s == 0.0: return 0.0 # Prevent possible ZeroDivisionError
     
     # Scale s into [1, 4) tracking matching factor of 2
@@ -28,9 +27,8 @@ def sqrt(*operands):
     return x * scale
 
 @register("cbrt")
-def cbrt(*operands):
-    s = get_unary_operand(operands)
-    ensure_numeric(s)
+def cbrt(s):
+    s = check_real(s, "s", allow_inf=True)
 
     if s == 0.0:
         return 0.0 # Prevent possible ZeroDivisionError

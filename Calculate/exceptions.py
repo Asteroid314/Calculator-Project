@@ -17,4 +17,3 @@ class VariableValueError(ValueError):
         super().__init__(
             f"Argument {index} has invalid value: {value}"
         )
-        

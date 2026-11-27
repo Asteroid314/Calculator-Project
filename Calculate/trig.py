@@ -17,15 +17,13 @@ def _reduce_angle(z):
     r -= n * PIO2_3T
     return n, r
 
-def _cordic_cos_sin(*operands):
+def _cordic_cos_sin(z):
     """Return (cos z, sin z) for an angle z in radians, using CORDIC.
     
        Reduces z to [-pi/4, pi/4] with extended precision pi/2. 
        Starts from a vector rotated by n quarter-turns 
        Performs CORDIC_ITERATIONS rotations. CORDIC_K must be the 
        product of 1/sqrt(1 + 2^-2i) over those iterations (pre-computed)."""
-    
-    z = get_unary_operand(operands)
 
     n, z = _reduce_angle(z)
     x, y = CORDIC_START[n % 4]
@@ -38,32 +36,28 @@ def _cordic_cos_sin(*operands):
     return _clean(x), _clean(y)
 
 @register("sine")
-def sine(*operands):
-    x = get_unary_operand(operands)
-    ensure_numeric(x)
+def sine(x):
+    x = check_real(x, "x")
     return _cordic_cos_sin(x)[1]
 
 @register("cosine")
-def cosine(*operands):
-    x = get_unary_operand(operands)
-    ensure_numeric(x)
+def cosine(x):
+    x = check_real(x, "x")
     return _cordic_cos_sin(x)[0]
 
 @register("tangent")
-def tangent(*operands):
-    x = get_unary_operand(operands)
-    ensure_numeric(x)
+def tangent(x):
+    x = check_real(x, "x")
     cordic_result = _cordic_cos_sin(x)
-    ensure_not_zero(cordic_result[0])
+    cordic_result[0] = ensure_not_all(0, cordic_result[0])
     return cordic_result[1] / cordic_result[0]
 
 @register("arcsine")
-def arcsine(*operands):
-    x = get_unary_operand(operands)
-    ensure_numeric(x)
+def arcsine(x):
+    x = check_real(x, "x")
+    x = ensure_domain(x, 1)
     negative = x < 0.0
     ax = abs(x)
-    ensure_domain(x, 1)
     if ax <= 0.5:
         if ax < 2.0 ** -26:
             return x
