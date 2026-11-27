@@ -27,13 +27,17 @@ def multiply(x, y):
 
 @register("divide")
 def divide(x, y):
-    """Return quotient of x and y. x, y must be real. y must be non-zero. x, y cannot both be infinite."""
-    x = check_real(x, "x", allow_inf=True)
-    y = check_real(y, "y", allow_inf=True)
-    y = ensure_not_all(0, [y])
-    x, y = ensure_not_all(INF, [x, y])
+    """Return quotient of x and y. x, y must satisfy various criteria (see validate_divide)."""
+    x, y = validate_divide(x, y)
 
     return x / y
+
+@register("int_divide")
+def int_divide(x, y):
+    """Return floor of quotient of x and y. x, y must satisfy various criteria (see validate_divide)."""
+    x, y = validate_divide(x, y)
+
+    return int(x / y)
 
 @register("power")
 def power(x, y):

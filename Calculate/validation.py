@@ -98,3 +98,11 @@ def validate_multiply(x, y):
         raise ValueError("x, y cannot be 0, INF in either order")
     else:
         return x, y
+
+def validate_divide(x, y):
+    """Return x, y if valid (real; y != 0; x, y not both infinite). Else raise ValueError."""
+    x = check_real(x, "x", allow_inf=True)
+    y = check_real(y, "y", allow_inf=True)
+    y = ensure_not_all(0, [y])
+    x, y = ensure_not_all(INF, [x, y])
+    return x, y
