@@ -3,8 +3,7 @@ from .registry import register
 
 @register("factorial")
 def factorial(x):
-
-    x = check_real(x, "x", allow_inf=True)
+    """Return product of integers 1 to x, provided x is an integer >= 0."""
     x = ensure_integer(x, "x", allow_inf=True)
     x = ensure_range(0, INF, True, True, x)
 
@@ -17,8 +16,7 @@ def factorial(x):
 
 @register("choose")
 def choose(n, r):
-    """Return n!/(r!*(n-r)!), provided n, r are integers,
-    0 <= n and 0 <= r <= n."""
+    """Return n!/(r!*(n-r)!), provided n, r are integers, 0 <= n and 0 <= r <= n."""
     n = ensure_integer(n, "n", allow_inf=False)
     r = ensure_integer(r, "r", allow_inf=False)
     n = ensure_range(0, INF, True, False, n)

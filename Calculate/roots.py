@@ -4,6 +4,7 @@ from .constants import *
 
 @register("sqrt")
 def sqrt(s):
+    """Return principal square root of s (positive number whose square is s). s must be real and >= 0."""
     s = check_real(s, "s", allow_inf=True)
     s = ensure_range(0, INF, True, True, s)
     if s == 0.0: return 0.0 # Prevent possible ZeroDivisionError
@@ -28,6 +29,7 @@ def sqrt(s):
 
 @register("cbrt")
 def cbrt(s):
+    """Return principal cube root of s (number whose cube is s). s must be real."""
     s = check_real(s, "s", allow_inf=True)
 
     if s == 0.0:
@@ -189,5 +191,6 @@ def _nth_root(s, n, polish=True):
 
 @register("nth_root")
 def nth_root(s, n, polish=True):
+    """Return principal n-th root of s (number whose n-th power is s). s and n must satisfy various criteria (see validate_nth_root)."""
     s, n = validate_nth_root(s, n)
     return _nth_root(s, n, polish)

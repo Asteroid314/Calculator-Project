@@ -37,16 +37,19 @@ def _cordic_cos_sin(z):
 
 @register("sine")
 def sine(x):
+    """Return sine of angle x (radians). x must be real."""
     x = check_real(x, "x")
     return _cordic_cos_sin(x)[1]
 
 @register("cosine")
 def cosine(x):
+    """Return cosine of angle x (radians). x must be real."""
     x = check_real(x, "x")
     return _cordic_cos_sin(x)[0]
 
 @register("tangent")
 def tangent(x):
+    """Return tangent of angle x (radians). x must be real and not an odd multiple of pi/2."""
     x = check_real(x, "x")
     cordic_result = _cordic_cos_sin(x)
     cordic_result[0] = ensure_not_all(0, [cordic_result[0]])
@@ -54,6 +57,7 @@ def tangent(x):
 
 @register("arcsine")
 def arcsine(x):
+    """Return arcsine (radians) of x. x must be real and -1 <= x <= 1."""
     x = check_real(x, "x")
     x = ensure_domain(x, 1)
     negative = x < 0.0
