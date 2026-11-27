@@ -73,7 +73,7 @@ class Parser:
                 
             elif currentToken.type == 'MOD':
                 self.EatToken('MOD')
-                #add mod function here
+                leftToken.value = execute("modulus", leftToken.value, self.Power().value)
 
         return leftToken
 
