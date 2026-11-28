@@ -11,7 +11,6 @@ INF = float("inf")
 H = 2.0 ** -35
 HALF_OVER_H = 2.0 ** 34
 
-
 # High-precision pi
 INV_PIO2 = 6.36619772367581382433e-01 # 2/pi
 PIO2_1 = 1.57079632673412561417e+00
@@ -61,3 +60,13 @@ TWO64 = 2 ** 64
 TWO_M64 = 2 ** -64
 TWO1000 = 2 ** 1000
 TWO_M1000 = 2 ** -1000
+
+# Degree-radian conversion-related constants
+RAD_HI = 0.017453292519943295
+RAD_LO = 2.9486522708701687e-19
+DEG_HI = 57.29577951308232
+DEG_LO = -1.9878495670576283e-15
+BIG = 2.0 ** 500
+SMALL = 2.0 ** -500
+UP = 2.0 ** 600
+DOWN = 2.0 ** -600
