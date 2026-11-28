@@ -19,20 +19,20 @@ class Parser:
         if self.token.type == tokenType: #therefore it is correct
             self.IncrementCharacter()
         else:
-            raise EatingTokenError("The token type you are inputting does not match the current token type")
+            raise EatingTokenError(f"The token type you are inputting does not match the current token type: inputted type {tokenType}, correct type {self.token.type}")
         
     def Peek(self):
         return self.tokensArray[self.idx + 1]
         
     def Factor(self):
         curr_token = self.token
-        if curr_token.type == 'INT' and self.Peek().type != 'LPAREN':
+        if curr_token.type == 'INT':
             self.EatToken('INT')
                 
-        elif curr_token.type == 'FLT' and self.Peek().type != 'LPAREN':
+        elif curr_token.type == 'FLT':
             self.EatToken('FLT')
         
-        elif (curr_token.type == 'NEGATE' or curr_token.type == 'LPAREN') or ((curr_token.type == 'INT' or curr_token.type == 'FLT') and self.Peek().type == 'LPAREN'): #one of two possibilities, -() or ()
+        elif (curr_token.type == 'NEGATE' or curr_token.type == 'LPAREN'): #one of two possibilities, -() or ()
             negative = False
             
             if curr_token.type == 'NEGATE':
@@ -49,17 +49,11 @@ class Parser:
             
             self.EatToken('LPAREN')
             result = self.AddSub()
-            
             if negative:
                 result.value = 0 - result.value #negating the value
-                
-            elif curr_token.type == 'INT' or curr_token.type == 'FLT':
-                result.value = result.value * curr_token.value
-                
+
             self.EatToken('RPAREN')
-            
-            if self.token.type == 'LPAREN':
-                result.value = result.value * self.Factor().value
+
                 
             return result
         else:
@@ -85,7 +79,7 @@ class Parser:
     def MulDiv(self):
         leftToken = self.Power()
 
-        while self.token.type == 'MUL' or self.token.type == 'DIV' or self.token.type == 'MOD':
+        while self.token.type == 'MUL' or self.token.type == 'DIV' or self.token.type == 'MOD' or self.token.type == 'LPAREN':
             currentToken = self.token
 
             if currentToken.type == 'MUL':

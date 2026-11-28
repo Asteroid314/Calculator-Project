@@ -7,6 +7,7 @@ class Lexer:
         self.expression = None
         self.idx = 0
         self.char = None
+        self.tokens = []
 
     def SetExpression(self, expr):
         if len(expr) == 0: #empty input
@@ -23,7 +24,7 @@ class Lexer:
             return True
 
     def InterpretOperation(self) -> Token: #encodes an operation based on its type
-        if self.char not in ARITHMETIC_OPERATORS and self.char not in BRACKETS:
+        if self.char not in ARITHMETIC_OPERATORS:
             raise MissingTokenError("This character is not in the available syntax") #should not occur
         else:
             originalChar = self.char
@@ -38,14 +39,21 @@ class Lexer:
                 return Token('MUL', '*')
             elif originalChar == '^':
                 return Token('POWER', '^')
-            elif originalChar == '(':
-                return Token('LPAREN', '(')
-            elif originalChar == ')':
-                return Token('RPAREN', ')')
             elif originalChar == '!':
                 return Token('FACT', '!')
             elif originalChar == '%':
                 return Token('MOD', '%')
+            
+    def InterpretBrackets(self) -> Token:
+        originalChar = self.char
+        if originalChar == '(':
+            if self.expression[self.idx - 1] in INTEGERS:
+                self.tokens.append(Token('MUL', '*'))
+            self.IncrementCharacter()
+            return Token('LPAREN', '(')
+        elif originalChar == ')':
+            self.IncrementCharacter()
+            return Token('RPAREN', ')')
 
     def InterpretFunction(self):
         result = ''
@@ -113,7 +121,6 @@ class Lexer:
 
 
     def ParseText(self): #iterates over tokens and checks for incorrect syntaxing
-        resultantTokens = []
         eol = False #pointer to check the end of line
         balancedParenthesisCount = 0
 
@@ -127,16 +134,16 @@ class Lexer:
             if self.char in INTEGERS or self.char == '-':
                 resultantToken = self.InterpretNumber()
                 if resultantToken.type != 'WHITELIST':
-                    resultantTokens.append(resultantToken)
+                    self.tokens.append(resultantToken)
 
             if self.char in ARITHMETIC_OPERATORS:
-                resultantTokens.append(self.InterpretOperation())
+                self.tokens.append(self.InterpretOperation())
 
             if self.char in ALPHABET:
-                resultantTokens.append(self.InterpretFunction())
+                self.tokens.append(self.InterpretFunction())
                 
             elif self.char in VARIABLES:
-                resultantTokens.append(self.InterpretVariable())
+                self.tokens.append(self.InterpretVariable())
 
             if self.char in BRACKETS:
                 if self.char == '(':
@@ -146,7 +153,7 @@ class Lexer:
 
                 if balancedParenthesisCount < 0: #caused by more than one right bracket without a left before it
                     raise InvalidParenthesisError("The parenthesis are ordered incorrectly.")
-                resultantTokens.append(self.InterpretOperation())
+                self.tokens.append(self.InterpretBrackets())
 
             if self.char not in ARITHMETIC_OPERATORS and self.char not in INTEGERS and self.char not in BRACKETS and self.char not in WHITELISTED and self.char not in FUNCTIONS and self.char not in ALPHABET: #this should not occur, however there will be more debug added later
                 raise InvalidExpressionError(f"This character is not in the available syntax: {self.char}")
@@ -157,11 +164,12 @@ class Lexer:
             raise InvalidParenthesisError("The parenthesis do not cancel out")
 
         #add an EOL (End of line) token on the end of the lexed token output
-        resultantTokens.append(Token('EOL:', '-1'))
-
-        return resultantTokens
+        self.tokens.append(Token('EOL:', '-1'))
+        
+        return self.tokens
 
     def ResetInitialise(self, newExpr): #resets the lexer so that a new line is not affected by a previous one
         self.expression = self.SetExpression(newExpr)
         self.idx = 0
         self.char = self.expression[self.idx]
+        self.tokens = []
