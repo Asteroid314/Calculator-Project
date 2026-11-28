@@ -79,7 +79,7 @@ class Parser:
             elif leftToken.value == 'TAN':
                 toBePassed.value = execute("tangent", toBePassed.value)
             elif leftToken.value == 'SQRT':
-                toBePassed.value = execute("sqrt")
+                toBePassed.value = execute("sqrt", toBePassed.value)
                 
             return toBePassed
         return leftToken

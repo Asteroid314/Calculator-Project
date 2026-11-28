@@ -70,7 +70,7 @@ class Lexer:
         elif result == 'tan':
             return Token('FUNCTION', 'TAN')
         elif result == 'sqrt':
-            raise InvalidExpressionError("Unfortunately, despite being parsed this method has not been implemented properly, so will not run.")
+            return Token('FUNCTION', 'SQRT')
         else:
             raise InvalidExpressionError("Result not in functions")
         
