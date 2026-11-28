@@ -21,25 +21,46 @@ class Parser:
         else:
             raise EatingTokenError("The token type you are inputting does not match the current token type")
         
-
+    def Peek(self):
+        return self.tokensArray[self.idx + 1]
+        
     def Factor(self):
         curr_token = self.token
-        if curr_token.type == 'INT':
+        if curr_token.type == 'INT' and self.Peek().type != 'LPAREN':
             self.EatToken('INT')
                 
-        elif curr_token.type == 'FLT':
+        elif curr_token.type == 'FLT' and self.Peek().type != 'LPAREN':
             self.EatToken('FLT')
-            
-        elif curr_token.type == 'NEGATE' or curr_token.type == 'LPAREN': #one of two possibilities, -() or ()
+        
+        elif (curr_token.type == 'NEGATE' or curr_token.type == 'LPAREN') or ((curr_token.type == 'INT' or curr_token.type == 'FLT') and self.Peek().type == 'LPAREN'): #one of two possibilities, -() or ()
             negative = False
+            
             if curr_token.type == 'NEGATE':
                 negative = True
                 self.EatToken('NEGATE')
+                
+            if curr_token.type == 'INT':
+                self.EatToken('INT')
+                
+            elif curr_token.type == 'FLT':
+                self.EatToken('FLT')
+            
+            #there is a more efficient way to do this, but ultimately I can't be bothered to implement it.
+            
             self.EatToken('LPAREN')
             result = self.AddSub()
+            
             if negative:
                 result.value = 0 - result.value #negating the value
+                
+            elif curr_token.type == 'INT' or curr_token.type == 'FLT':
+                result.value = result.value * curr_token.value
+                
             self.EatToken('RPAREN')
+            
+            if self.token.type == 'LPAREN':
+                result.value = result.value * self.Factor().value
+                
             return result
         else:
             raise InvalidExpressionError("The expression is invalid at index: ", self.idx)
