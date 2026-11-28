@@ -47,7 +47,7 @@ class Lexer:
     def InterpretBrackets(self) -> Token:
         originalChar = self.char
         if originalChar == '(':
-            if self.expression[self.idx - 1] in INTEGERS:
+            if self.idx > 0 and self.expression[self.idx - 1] in INTEGERS:
                 self.tokens.append(Token('MUL', '*'))
             self.IncrementCharacter()
             return Token('LPAREN', '(')

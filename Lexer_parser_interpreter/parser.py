@@ -10,7 +10,7 @@ class Parser:
 
     def IncrementCharacter(self):
         self.idx += 1
-        if self.idx < len(self.tokensArray):
+        if self.token.type != 'EOF':
             self.token = self.tokensArray[self.idx]
             return self.token
         return False
