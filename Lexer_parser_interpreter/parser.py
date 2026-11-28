@@ -54,7 +54,6 @@ class Parser:
 
             self.EatToken('RPAREN')
 
-                
             return result
         else:
             raise InvalidExpressionError("The expression is invalid at index: ", self.idx)
@@ -79,7 +78,7 @@ class Parser:
     def MulDiv(self):
         leftToken = self.Power()
 
-        while self.token.type == 'MUL' or self.token.type == 'DIV' or self.token.type == 'MOD' or self.token.type == 'LPAREN':
+        while self.token.type == 'MUL' or self.token.type == 'DIV' or self.token.type == 'MOD':
             currentToken = self.token
 
             if currentToken.type == 'MUL':
