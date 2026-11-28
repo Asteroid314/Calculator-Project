@@ -13,11 +13,11 @@ class GraphVisualiser:
         
         #plot X axis
         
-        canvas.create_line(50, 250, 450, 250, width=2, arrow=tk.LAST)
+        canvas.create_line(50, 250, 450, 250, width=2, arrow=tkinter.LAST)
         
         #plot Y axis
         
-        canvas.create_line(250, 450, 250, 50, width=2, arrow=tk.LAST)
+        canvas.create_line(250, 450, 250, 50, width=2, arrow=tkinter.LAST)
         
         root.mainloop()
         

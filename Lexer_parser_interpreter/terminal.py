@@ -1,5 +1,5 @@
 from . import lexer, parser
-
+from Graphing import grapher
 
 def RunTerminal(message, shouldReturn):
 
@@ -10,11 +10,18 @@ def RunTerminal(message, shouldReturn):
     
     while True:
         uinput = input('> ')
-        myLexer.ResetInitialise(uinput)
-        lexedTokens = myLexer.ParseText()
-        myParser.ResetParser(lexedTokens)
-        parsedResult = myParser.AddSub()
-        if shouldReturn:
-            return parsedResult
-        
-        print(parsedResult.value)
+        if uinput == 'M': #a menu call has been made, no point to even start lexing
+            menuInput = input("You have entered the menu, type C to start calculating again, type G to enter graphing mode: ")
+            if menuInput == 'C':
+                continue
+            elif menuInput == 'G': #the user has entered graphing mode
+                grapher.create_y_vals()
+        else:
+            myLexer.ResetInitialise(uinput, 0)
+            lexedTokens = myLexer.ParseText()
+            myParser.ResetParser(lexedTokens)
+            parsedResult = myParser.AddSub()
+            if shouldReturn:
+                return parsedResult
+            
+            print(parsedResult.value)

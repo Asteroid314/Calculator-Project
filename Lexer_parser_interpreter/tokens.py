@@ -7,10 +7,10 @@ class Token:
         return self.value
 
 class Variable:
-    def __init__(self, type):
-        self.name = type
+    def __init__(self, character, value=0): #variable values default to 0, just like in a normal calculator
+        self.name = character
         self.type = 'VAR'
-        self.value = 0
+        self.value = self.setValue(value)
 
     def getValue(self):
         return self.value

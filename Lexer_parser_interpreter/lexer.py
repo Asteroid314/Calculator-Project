@@ -8,6 +8,7 @@ class Lexer:
         self.idx = 0
         self.char = None
         self.tokens = []
+        self.variableSetValue = 0
 
     def SetExpression(self, expr):
         if len(expr) == 0: #empty input
@@ -117,11 +118,10 @@ class Lexer:
     def InterpretVariable(self):
         currChar = self.char
         self.IncrementCharacter()
-        return Variable(currChar) #there is simply no point to check, as all variables have the same type anyways
+        return Variable(currChar, self.variableSetValue) #there is simply no point to check, as all variables have the same type anyways
 
 
     def ParseText(self): #iterates over tokens and checks for incorrect syntaxing
-        eol = False #pointer to check the end of line
         balancedParenthesisCount = 0
 
         while self.idx < len(self.expression):
@@ -168,8 +168,9 @@ class Lexer:
         
         return self.tokens
 
-    def ResetInitialise(self, newExpr): #resets the lexer so that a new line is not affected by a previous one
+    def ResetInitialise(self, newExpr, newVariableSetVal): #resets the lexer so that a new line is not affected by a previous one
         self.expression = self.SetExpression(newExpr)
         self.idx = 0
         self.char = self.expression[self.idx]
         self.tokens = []
+        self.variableSetValue = newVariableSetVal
