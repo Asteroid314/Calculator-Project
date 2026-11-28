@@ -1,7 +1,7 @@
 from .constants import *
 from .validation import *
 from .registry import register
-from .roots import _split, _two_prod
+from .roots import _two_prod
 
 def _prepare(x):
     """Validate x and return it as a float."""
