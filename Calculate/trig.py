@@ -52,7 +52,7 @@ def tangent(x):
     """Return tangent of angle x (radians). x must be real and not an odd multiple of pi/2."""
     x = check_real(x, "x")
     cordic_result = _cordic_cos_sin(x)
-    cordic_result = ensure_not_all(90, cordic_result)
+    cordic_result = ensure_not_all(0, cordic_result)
     return cordic_result[1] / cordic_result[0]
 
 @register("arcsine")

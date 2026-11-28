@@ -73,11 +73,11 @@ class Parser:
             toBePassed = self.Factor() #as there will be a bracketed expression in it
             
             if leftToken.value == 'SIN':
-                toBePassed.value = execute("sine", toBePassed.value)
+                toBePassed.value = execute("sine", execute("degtorad", toBePassed.value))
             elif leftToken.value == 'COS':
-                toBePassed.value = execute("cosine", toBePassed.value)
+                toBePassed.value = execute("cosine", execute("degtorad", toBePassed.value))
             elif leftToken.value == 'TAN':
-                toBePassed.value = execute("tangent", toBePassed.value)
+                toBePassed.value = execute("tangent", execute("degtorad", toBePassed.value))
             elif leftToken.value == 'SQRT':
                 toBePassed.value = execute("sqrt", toBePassed.value)
                 
