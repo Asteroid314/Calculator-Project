@@ -14,10 +14,6 @@ class Parser:
             self.token = self.tokensArray[self.idx]
             return self.token
         return False
-    
-    def Peek(self, forwards):
-        
-        return self.tokensArray[self.idx + 1].value
 
     def EatToken(self, tokenType):
         if self.token.type == tokenType: #therefore it is correct
