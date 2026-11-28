@@ -103,6 +103,6 @@ def validate_divide(x, y):
     """Return x, y if valid (real; y != 0; x, y not both infinite). Else raise ValueError."""
     x = check_real(x, "x", allow_inf=True)
     y = check_real(y, "y", allow_inf=True)
-    y = ensure_not_all(0, [y])
+    y = ensure_not_all(0, [y])[0]
     x, y = ensure_not_all(INF, [x, y])
     return x, y
