@@ -34,9 +34,15 @@ class Parser:
         elif curr_token.type == 'FLT':
             self.EatToken('FLT')
             
-        elif curr_token.type == 'LPAREN':
+        elif curr_token.type == 'NEGATE' or curr_token.type == 'LPAREN': #one of two possibilities, -() or ()
+            negative = False
+            if curr_token.type == 'NEGATE':
+                negative = True
+                self.EatToken('NEGATE')
             self.EatToken('LPAREN')
             result = self.AddSub()
+            if negative:
+                result.value = 0 - result.value #negating the value
             self.EatToken('RPAREN')
             return result
         else:

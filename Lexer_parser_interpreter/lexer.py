@@ -90,14 +90,21 @@ class Lexer:
 
         #after this has ran, the current char will be the one after the end of number
         
-        if floating and not negative:
-            return Token('FLT', float(result))
-        elif floating and negative:
-            return Token('FLT', 0 - float(result))
-        elif not floating and not negative:
-            return Token('INT', int(result))
+        if result:
+            if floating and not negative:
+                return Token('FLT', float(result))
+            elif floating and negative:
+                return Token('FLT', 0 - float(result))
+            elif not floating and not negative:
+                return Token('INT', int(result))
+            elif not floating and negative:
+                return Token('INT', 0 - int(result))
+        elif len(result) == 0 and negative: #caused by doing something like -(8)
+            return Token('NEGATE', -1)
         else:
-            return Token('INT', 0 - int(result))
+            return Token('WHITELIST', -1) #essentially a useless token. Should be discarded
+        
+        raise MissingTokenError("The expression has been inputted in a malformed way.")
         
     def InterpretVariable(self):
         currChar = self.char
@@ -118,7 +125,9 @@ class Lexer:
                     break
 
             if self.char in INTEGERS or self.char == '-':
-                resultantTokens.append(self.InterpretNumber())
+                resultantToken = self.InterpretNumber()
+                if resultantToken.type != 'WHITELIST':
+                    resultantTokens.append(resultantToken)
 
             if self.char in ARITHMETIC_OPERATORS:
                 resultantTokens.append(self.InterpretOperation())
