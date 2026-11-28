@@ -64,13 +64,13 @@ class Lexer:
         #this runs if a successful thing is found
 
         if result == 'sin':
-            return Token('SIN', 'sin')
+            return Token('FUNCTION', 'SIN')
         elif result == 'cos':
-            return Token('COS', 'cos')
+            return Token('FUNCTION', 'COS')
         elif result == 'tan':
-            return Token('TAN', 'tan')
+            return Token('FUNCTION', 'TAN')
         elif result == 'sqrt':
-            return Token('SQRT', 'sqrt')
+            raise InvalidExpressionError("Unfortunately, despite being parsed this method has not been implemented properly, so will not run.")
         else:
             raise InvalidExpressionError("Result not in functions")
         

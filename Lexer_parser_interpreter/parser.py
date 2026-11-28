@@ -21,7 +21,7 @@ class Parser:
         else:
             raise EatingTokenError(f"The token type you are inputting does not match the current token type: inputted type {tokenType}, correct type {self.token.type}")
         
-    def Peek(self):
+    def Peek(self): #deprecated
         return self.tokensArray[self.idx + 1]
         
     def Factor(self):
@@ -31,6 +31,9 @@ class Parser:
                 
         elif curr_token.type == 'FLT':
             self.EatToken('FLT')
+            
+        elif curr_token.type == 'FUNCTION':
+            self.EatToken('FUNCTION')
         
         elif (curr_token.type == 'NEGATE' or curr_token.type == 'LPAREN'): #one of two possibilities, -() or ()
             negative = False
@@ -59,9 +62,32 @@ class Parser:
             raise InvalidExpressionError("The expression is invalid at index: ", self.idx)
         
         return curr_token
+    
+    def FunctionsParsing(self):
+        leftToken = self.Factor()
+        
+        if leftToken.type == 'FUNCTION':
+            
+            if self.token.type != 'LPAREN': #all of these functions NEED a left parenthesis after the function, so should error if this is not met.
+                raise InvalidExpressionError("There are no brackets after the function!")
+            toBePassed = self.Factor() #as there will be a bracketed expression in it
+            
+            if leftToken.value == 'SIN':
+                toBePassed.value = execute("sine", toBePassed.value)
+            elif leftToken.value == 'COS':
+                toBePassed.value = execute("cosine", toBePassed.value)
+            elif leftToken.value == 'TAN':
+                toBePassed.value = execute("tangent", toBePassed.value)
+            elif leftToken.value == 'SQRT':
+                toBePassed.value = execute("sqrt")
+                
+            return toBePassed
+        return leftToken
+            
+            
 
     def Power(self):
-        leftToken = self.Factor()
+        leftToken = self.FunctionsParsing()
         
         if self.token.type == 'FACT' and leftToken.type == 'INT':
             leftToken.value = execute("factorial", leftToken.value)
