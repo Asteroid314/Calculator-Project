@@ -30,13 +30,10 @@ class Parser:
         curr_token = self.token
         if curr_token.type == 'INT':
             self.EatToken('INT')
-            
-            if self.token.value == '!': #a factorial has occurred
-                curr_token.value = execute("factorial", curr_token.value)
-                self.EatToken('FACT')
                 
         elif curr_token.type == 'FLT':
             self.EatToken('FLT')
+            
         elif curr_token.type == 'LPAREN':
             self.EatToken('LPAREN')
             result = self.AddSub()
@@ -49,6 +46,11 @@ class Parser:
 
     def Power(self):
         leftToken = self.Factor()
+        
+        if self.token.type == 'FACT' and leftToken.type == 'INT':
+            leftToken.value = execute("factorial", leftToken.value)
+            self.EatToken('FACT')
+
 
         if self.token.type == 'POWER':
             self.EatToken('POWER')
