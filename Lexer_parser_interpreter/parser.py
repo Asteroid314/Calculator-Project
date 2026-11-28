@@ -85,7 +85,7 @@ class Parser:
     def MulDiv(self):
         leftToken = self.Power()
 
-        while self.token.type == 'MUL' or self.token.type == 'DIV':
+        while self.token.type == 'MUL' or self.token.type == 'DIV' or self.token.type == 'MOD':
             currentToken = self.token
 
             if currentToken.type == 'MUL':
