@@ -131,7 +131,7 @@ class Lexer:
                 if self.idx >= len(self.expression):
                     break
 
-            if self.char in INTEGERS or (self.char == '-' and self.idx == 0) or (self.char == '-' and self.idx > 0 and (self.expression[self.idx - 1] not in INTEGERS) and (self.expression[self.idx - 1] not in VARIABLES)):
+            if self.char in INTEGERS or (self.char == '-' and self.idx == 0) or (self.char == '-' and self.idx > 0 and (self.expression[self.idx - 1] not in INTEGERS) and (self.expression[self.idx - 1] not in VARIABLES) and (self.expression[self.idx - 1] not in BRACKETS)):
                 resultantToken = self.InterpretNumber()
                 if resultantToken.type != 'WHITELIST':
                     self.tokens.append(resultantToken)
