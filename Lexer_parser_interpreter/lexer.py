@@ -142,7 +142,7 @@ class Lexer:
             if self.char in ALPHABET:
                 self.tokens.append(self.InterpretFunction())
                 
-            elif self.char in VARIABLES:
+            if self.char in VARIABLES:
                 self.tokens.append(self.InterpretVariable())
 
             if self.char in BRACKETS:

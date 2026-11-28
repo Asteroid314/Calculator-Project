@@ -1,15 +1,15 @@
 from . import lexer, parser
 
-def RunTerminal():
+def RunTerminal(message):
 
     myLexer = lexer.Lexer() #cba to get better method
     myParser = parser.Parser()
 
-    print('Welcome to the C.L.I.V.E Calculator (Calculation Logic and Intelligent Value Engine)!')
+    print(message)
     while True: #will change this
         uinput = input('> ')
         myLexer.ResetInitialise(uinput)
         lexedTokens = myLexer.ParseText()
         myParser.ResetParser(lexedTokens)
         parsedResult = myParser.AddSub()
-        print(parsedResult.value)
+        return parsedResult
