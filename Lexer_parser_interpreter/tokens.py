@@ -7,8 +7,8 @@ class Token:
         return self.value
 
 class Variable:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, type):
+        self.name = type
         self.type = 'VAR'
         self.value = 0
 

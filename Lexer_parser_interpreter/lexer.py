@@ -155,7 +155,7 @@ class Lexer:
                     raise InvalidParenthesisError("The parenthesis are ordered incorrectly.")
                 self.tokens.append(self.InterpretBrackets())
 
-            if self.char not in ARITHMETIC_OPERATORS and self.char not in INTEGERS and self.char not in BRACKETS and self.char not in WHITELISTED and self.char not in FUNCTIONS and self.char not in ALPHABET: #this should not occur, however there will be more debug added later
+            if self.char not in ARITHMETIC_OPERATORS and self.char not in INTEGERS and self.char not in BRACKETS and self.char not in WHITELISTED and self.char not in FUNCTIONS and self.char not in ALPHABET and self.char not in VARIABLES: #this should not occur, however there will be more debug added later
                 raise InvalidExpressionError(f"This character is not in the available syntax: {self.char}")
 
 

@@ -1,15 +1,20 @@
 from . import lexer, parser
 
-def RunTerminal(message):
+
+def RunTerminal(message, shouldReturn):
 
     myLexer = lexer.Lexer() #cba to get better method
     myParser = parser.Parser()
 
     print(message)
-    while True: #will change this
+    
+    while True:
         uinput = input('> ')
         myLexer.ResetInitialise(uinput)
         lexedTokens = myLexer.ParseText()
         myParser.ResetParser(lexedTokens)
         parsedResult = myParser.AddSub()
-        return parsedResult
+        if shouldReturn:
+            return parsedResult
+        
+        print(parsedResult.value)

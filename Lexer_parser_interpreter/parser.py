@@ -34,6 +34,9 @@ class Parser:
             
         elif curr_token.type == 'FUNCTION':
             self.EatToken('FUNCTION')
+            
+        elif curr_token.type == 'VAR':
+            self.EatToken('VAR')
         
         elif (curr_token.type == 'NEGATE' or curr_token.type == 'LPAREN'): #one of two possibilities, -() or ()
             negative = False
