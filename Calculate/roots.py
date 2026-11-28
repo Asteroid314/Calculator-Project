@@ -6,7 +6,7 @@ from .constants import *
 def sqrt(s):
     """Return principal square root of s (positive number whose square is s). s must be real and >= 0."""
     s = check_real(s, "s", allow_inf=True)
-    s = ensure_range(0, INF, True, True, s)
+    [s] = ensure_range(0, INF, True, True, [s])
     if s == 0.0: return 0.0 # Prevent possible ZeroDivisionError
     
     # Scale s into [1, 4) tracking matching factor of 2
